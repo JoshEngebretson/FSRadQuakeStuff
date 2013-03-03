@@ -33,7 +33,7 @@
 #include "stdafx.h"
 #include "FSRad.h"
 #include "SOctree.h"
-#include "ProgressDlg.h"
+//#include "ProgressDlg.h"
 #include "BSP.h"
 
 // ---------------------------------------------------------------------------------------------------------------------------------
@@ -74,6 +74,7 @@ static	geom::Point3	planeCenterOffsets[] =
 
 static	bool	updateDisplay(SOctree::sBuildInfo &buildInfo, const unsigned int depth, const bool forceUpdate = false)
 {
+	/*
 	if (!buildInfo.progressDialog) return true;
 
 	// Update the display
@@ -130,6 +131,7 @@ static	bool	updateDisplay(SOctree::sBuildInfo &buildInfo, const unsigned int dep
 		buildInfo.progressDialog->setLabel5("Max depth:");
 		buildInfo.progressDialog->setText5(dsp);
 	}
+	*/
 
 	return true;
 }
@@ -151,7 +153,7 @@ bool	SOctree::build(GeomDB & geometry, sBuildInfo & bi)
 	geom::Point3	max = inPolys.head()->data().xyz()[0];
 	float		totalArea = 0;
 
-	if (bi.progressDialog) bi.progressDialog->setCurrentStatus("Preparing scene...");
+	//if (bi.progressDialog) bi.progressDialog->setCurrentStatus("Preparing scene...");
 
 	// Get the bounding box of the scene from polygons
 	{
@@ -159,7 +161,7 @@ bool	SOctree::build(GeomDB & geometry, sBuildInfo & bi)
 		unsigned int	index = 0;
 		while(n)
 		{
-			if (!(index&0xf) && bi.progressDialog) bi.progressDialog->setCurrentPercent(static_cast<float>(index) / static_cast<float>(inPolys.size()) * 100.0f);
+			//if (!(index&0xf) && bi.progressDialog) bi.progressDialog->setCurrentPercent(static_cast<float>(index) / static_cast<float>(inPolys.size()) * 100.0f);
 			index++;
 
 			const RadPrim &	p = n->data();
@@ -214,13 +216,13 @@ bool	SOctree::build(GeomDB & geometry, sBuildInfo & bi)
 
 	char	dsp[90];
 	sprintf(dsp, "%d", bi.originalPolys);
-	if (bi.progressDialog)
-	{
-		bi.progressDialog->setLabel1("Polygons:");
-		bi.progressDialog->setText1(dsp);
-		bi.progressDialog->setCurrentPercent(0.0f);
-		bi.progressDialog->setCurrentStatus("Building splitting octree...");
-	}
+	//if (bi.progressDialog)
+	//{
+	//	bi.progressDialog->setLabel1("Polygons:");
+	//	bi.progressDialog->setText1(dsp);
+	//	bi.progressDialog->setCurrentPercent(0.0f);
+	//	bi.progressDialog->setCurrentStatus("Building splitting octree...");
+	//}
 
 	// Root's center & radius...
 
@@ -300,7 +302,7 @@ bool	SOctree::recursiveBuild(RadPrimList & inPolys, const RadPatchList & inLight
 			buildInfo.scenePolys = &polys();
 			buildInfo.quantizeResolution = bi.bspQuantizeResolution;
 			buildInfo.leastDepthErrorBoundsPercent = bi.bspLeastDepthErrorBoundsPercent;
-			buildInfo.progressDialog = NULL;
+			//buildInfo.progressDialog = NULL;
 
 			// Build the BSP
 

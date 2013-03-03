@@ -40,7 +40,7 @@
 #include "RadPrim.h"
 #include "RadPatch.h"
 #include "RadLMap.h"
-class	ProgressDlg;
+//class	ProgressDlg;
 
 // ---------------------------------------------------------------------------------------------------------------------------------
 
@@ -64,10 +64,10 @@ virtual					~GeomDB();
 
 	// Implementation		
 
-		bool			readENT(const fstl::string & filename, ProgressDlg & prog, const geom::Color3 & defaultReflectivity);
-		bool			readASE(const fstl::string & filename, ProgressDlg & prog, const geom::Color3 & defaultReflectivity);
-		bool			readOCT(const fstl::string & filename, ProgressDlg & prog, const geom::Color3 & defaultReflectivity);
-		bool			writeOCT(const fstl::string & filename, ProgressDlg & prog);
+		bool			readENT(const fstl::string & filename, const geom::Color3 & defaultReflectivity);
+		bool			readASE(const fstl::string & filename, const geom::Color3 & defaultReflectivity);
+		bool			readOCT(const fstl::string & filename, const geom::Color3 & defaultReflectivity);
+		bool			writeOCT(const fstl::string & filename);
 
 	// Accessors			
 

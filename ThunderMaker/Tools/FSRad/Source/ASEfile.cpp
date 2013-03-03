@@ -42,6 +42,8 @@
 #define new DEBUG_NEW
 #endif
 
+#define TRACE printf
+
 // ---------------------------------------------------------------------------------------------------------------------------------
 
 static	const char *	newline = "\r\n";
@@ -71,8 +73,8 @@ bool	AseFile::load(const fstl::string & filename)
 		// Check the file length
 
 		unsigned int	fileLength;
-		struct _stat	st;
-		if(_stat(filename.asArray(), &st)) fileLength = 0;
+		struct stat st;
+		if(stat(filename.asArray(), &st)) fileLength = 0;
 		fileLength = st.st_size;
 		if (!fileLength) throw "File has no length, or is not a regular file";
 
@@ -121,7 +123,8 @@ bool	AseFile::load(const fstl::string & filename)
 		if (err && *err)
 		{
 			static	fstl::string	msg = fstl::string("Unable to load ASE file:\n\n") + err;
-			AfxMessageBox(msg.asArray());
+			//AfxMessageBox(msg.asArray());
+			assert(0);
 		}
 
 		if (fp) fclose(fp);

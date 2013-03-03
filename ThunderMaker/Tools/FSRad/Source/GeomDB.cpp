@@ -33,7 +33,7 @@
 #include "stdafx.h"
 #include "FSRad.h"
 #include "GeomDB.h"
-#include "ProgressDlg.h"
+//#include "ProgressDlg.h"
 #include "Ent.h"
 #include "AseFile.h"
 
@@ -59,11 +59,11 @@ static char THIS_FILE[] = __FILE__;
 
 // ---------------------------------------------------------------------------------------------------------------------------------
 
-bool	GeomDB::readENT(const fstl::string & filename, ProgressDlg & prog, const geom::Color3 & defaultReflectivity)
+bool	GeomDB::readENT(const fstl::string & filename, const geom::Color3 & defaultReflectivity)
 {
 	try
 	{
-		prog.setCurrentStatus("Converting geometry");
+		//prog.setCurrentStatus("Converting geometry");
 
 		EntFile	ef(filename.asArray());
 		ef.read();
@@ -95,8 +95,8 @@ bool	GeomDB::readENT(const fstl::string & filename, ProgressDlg & prog, const ge
 			{
 				if (!(polyID&0x3))
 				{
-					prog.setCurrentPercent(static_cast<float>(polyID) / static_cast<float>(totalPolys) * 100.0f);
-					if (prog.stopRequested()) throw "";
+					//prog.setCurrentPercent(static_cast<float>(polyID) / static_cast<float>(totalPolys) * 100.0f);
+					//if (prog.stopRequested()) throw "";
 				}
 
 				entPoly &	p = obj.polys[j];
@@ -143,7 +143,8 @@ bool	GeomDB::readENT(const fstl::string & filename, ProgressDlg & prog, const ge
 	{
 		if (err && *err)
 		{
-			AfxMessageBox(err);
+			//AfxMessageBox(err);
+			assert(0);
 			return false;
 		}
 	}
@@ -153,16 +154,16 @@ bool	GeomDB::readENT(const fstl::string & filename, ProgressDlg & prog, const ge
 
 // ---------------------------------------------------------------------------------------------------------------------------------
 
-bool	GeomDB::readASE(const fstl::string & filename, ProgressDlg & prog, const geom::Color3 & defaultReflectivity)
+bool	GeomDB::readASE(const fstl::string & filename, const geom::Color3 & defaultReflectivity)
 {
 	try
 	{
-		prog.setCurrentStatus("Loading geometry");
+		//prog.setCurrentStatus("Loading geometry");
 
 		AseFile	ase;
 		if (!ase.load(filename)) throw "Unable to load ASE file";
 
-		prog.setCurrentStatus("Converting geometry");
+		//prog.setCurrentStatus("Converting geometry");
 
 		// Convert the data over
 
@@ -191,8 +192,8 @@ bool	GeomDB::readASE(const fstl::string & filename, ProgressDlg & prog, const ge
 			{
 				if (!(polyID&0x3))
 				{
-					prog.setCurrentPercent(static_cast<float>(polyID) / static_cast<float>(totalPolys) * 100.0f);
-					if (prog.stopRequested()) throw "";
+					//prog.setCurrentPercent(static_cast<float>(polyID) / static_cast<float>(totalPolys) * 100.0f);
+					//if (prog.stopRequested()) throw "";
 				}
 
 				// Vertex indices
@@ -297,7 +298,7 @@ bool	GeomDB::readASE(const fstl::string & filename, ProgressDlg & prog, const ge
 
 		if (ase.materials().size())
 		{
-			prog.setCurrentStatus("Storing textures");
+			//prog.setCurrentStatus("Storing textures");
 			
 			sAseMat &	m = ase.materials()[0];
 
@@ -383,7 +384,7 @@ bool	GeomDB::readASE(const fstl::string & filename, ProgressDlg & prog, const ge
 		// Convert the lights to patches
 
 		{
-			prog.setCurrentStatus("Converting lights");
+			//prog.setCurrentStatus("Converting lights");
 
 			// We reserve for speed
 
@@ -391,8 +392,8 @@ bool	GeomDB::readASE(const fstl::string & filename, ProgressDlg & prog, const ge
 
 			for (unsigned int i = 0; i < ase.lights().size(); i++)
 			{
-				prog.setCurrentPercent(static_cast<float>(i) / static_cast<float>(ase.lights().size()) * 100.0f);
-				if (prog.stopRequested()) throw false;
+				//prog.setCurrentPercent(static_cast<float>(i) / static_cast<float>(ase.lights().size()) * 100.0f);
+				//if (prog.stopRequested()) throw false;
 				sAseLight &	curLight = ase.lights()[i];
 
 				// Swap orientation because max uses non-left-handed coordinates
@@ -422,7 +423,8 @@ bool	GeomDB::readASE(const fstl::string & filename, ProgressDlg & prog, const ge
 	{
 		if (err && *err)
 		{
-			AfxMessageBox(err);
+			//AfxMessageBox(err);
+			assert(0);
 			return false;
 		}
 	}
@@ -432,7 +434,7 @@ bool	GeomDB::readASE(const fstl::string & filename, ProgressDlg & prog, const ge
 
 // ---------------------------------------------------------------------------------------------------------------------------------
 
-bool	GeomDB::readOCT(const fstl::string & filename, ProgressDlg & prog, const geom::Color3 & defaultReflectivity)
+bool	GeomDB::readOCT(const fstl::string & filename, const geom::Color3 & defaultReflectivity)
 {
 	// Open the file
 
@@ -515,7 +517,7 @@ bool	GeomDB::readOCT(const fstl::string & filename, ProgressDlg & prog, const ge
 
 		// Read the data
 
-		prog.setCurrentStatus("Loading geometry");
+		//prog.setCurrentStatus("Loading geometry");
 
 		if (header.numVerts     && fread(verts,      sizeof(octVert)     * header.numVerts,     1, fp) != 1) throw false;
 		if (header.numFaces     && fread(faces,      sizeof(octFace)     * header.numFaces,     1, fp) != 1) throw false;
@@ -526,7 +528,7 @@ bool	GeomDB::readOCT(const fstl::string & filename, ProgressDlg & prog, const ge
 
 		// Convert the polys
 		{
-			prog.setCurrentStatus("Converting geometry");
+			//prog.setCurrentStatus("Converting geometry");
 
 			polys().reserve(header.numFaces);
 
@@ -534,8 +536,8 @@ bool	GeomDB::readOCT(const fstl::string & filename, ProgressDlg & prog, const ge
 			{
 				if (!(i&0xf))
 				{
-					prog.setCurrentPercent(static_cast<float>(i) / static_cast<float>(header.numFaces) * 100.0f);
-					if (prog.stopRequested()) throw false;
+					//prog.setCurrentPercent(static_cast<float>(i) / static_cast<float>(header.numFaces) * 100.0f);
+					//if (prog.stopRequested()) throw false;
 				}
 
 				octFace &	curFace = faces[i];
@@ -623,7 +625,7 @@ bool	GeomDB::readOCT(const fstl::string & filename, ProgressDlg & prog, const ge
 
 		// Save off the textures
 		{
-			prog.setCurrentStatus("Storing textures");
+			//prog.setCurrentStatus("Storing textures");
 			
 			for (int i = 0; i < header.numTextures; i++)
 			{
@@ -636,7 +638,7 @@ bool	GeomDB::readOCT(const fstl::string & filename, ProgressDlg & prog, const ge
 
 		// Convert the lights to patches
 		{
-			prog.setCurrentStatus("Converting lights");
+			//prog.setCurrentStatus("Converting lights");
 
 			// We reserve for speed
 
@@ -644,8 +646,8 @@ bool	GeomDB::readOCT(const fstl::string & filename, ProgressDlg & prog, const ge
 
 			for (int i = 0; i < header.numLights; i++)
 			{
-				prog.setCurrentPercent(static_cast<float>(i) / static_cast<float>(header.numLights) * 100.0f);
-				if (prog.stopRequested()) throw false;
+				//prog.setCurrentPercent(static_cast<float>(i) / static_cast<float>(header.numLights) * 100.0f);
+				//if (prog.stopRequested()) throw false;
 				octLight &	curLight = ligts[i];
 
 				fstl::swap(curLight.pos[1], curLight.pos[2]);
@@ -689,7 +691,7 @@ bool	GeomDB::readOCT(const fstl::string & filename, ProgressDlg & prog, const ge
 
 // ---------------------------------------------------------------------------------------------------------------------------------
 
-bool	GeomDB::writeOCT(const fstl::string & filename, ProgressDlg & prog)
+bool	GeomDB::writeOCT(const fstl::string & filename)
 {
 	// Open the file
 
@@ -795,7 +797,7 @@ bool	GeomDB::writeOCT(const fstl::string & filename, ProgressDlg & prog)
 
 		// Convert the polys & vertices
 		{
-			prog.setCurrentStatus("Converting geometry");
+			//prog.setCurrentStatus("Converting geometry");
 
 			unsigned int	pIndex = 0;
 			unsigned int	vIndex = 0;
@@ -804,8 +806,8 @@ bool	GeomDB::writeOCT(const fstl::string & filename, ProgressDlg & prog)
 			{
 				if (!(pIndex&0xf))
 				{
-					prog.setCurrentPercent(static_cast<float>(pIndex) / static_cast<float>(polys().size()) * 100.0f);
-					if (prog.stopRequested()) throw false;
+					//prog.setCurrentPercent(static_cast<float>(pIndex) / static_cast<float>(polys().size()) * 100.0f);
+					//if (prog.stopRequested()) throw false;
 				}
 
 				RadPrim &	p = i->data();
@@ -836,14 +838,14 @@ bool	GeomDB::writeOCT(const fstl::string & filename, ProgressDlg & prog)
 
 		// Convert the textures
 		{
-			prog.setCurrentStatus("Converting textures");
+			//prog.setCurrentStatus("Converting textures");
 
 			for (int i = 0; i < header.numTextures; ++i)
 			{
 				if (!(i&0xf))
 				{
-					prog.setCurrentPercent(static_cast<float>(i) / static_cast<float>(header.numTextures) * 100.0f);
-					if (prog.stopRequested()) throw false;
+					//prog.setCurrentPercent(static_cast<float>(i) / static_cast<float>(header.numTextures) * 100.0f);
+					//if (prog.stopRequested()) throw false;
 				}
 
 				sOctTexture &	ot = octTextures()[i];
@@ -854,15 +856,15 @@ bool	GeomDB::writeOCT(const fstl::string & filename, ProgressDlg & prog)
 
 		// Convert the lights
 		{
-			prog.setCurrentStatus("Converting lights");
+			//prog.setCurrentStatus("Converting lights");
 
 			unsigned int	idx = 0;
 			for (RadPatchList::node * i = lights().head(); i; i = i->next(), ++idx)
 			{
 				if (!(idx&0xf))
 				{
-					prog.setCurrentPercent(static_cast<float>(idx) / static_cast<float>(header.numLights) * 100.0f);
-					if (prog.stopRequested()) throw false;
+					//prog.setCurrentPercent(static_cast<float>(idx) / static_cast<float>(header.numLights) * 100.0f);
+					//if (prog.stopRequested()) throw false;
 				}
 
 				RadPatch &	patch = i->data();
@@ -878,14 +880,14 @@ bool	GeomDB::writeOCT(const fstl::string & filename, ProgressDlg & prog)
 
 		// Convert the lightmaps
 		{
-			prog.setCurrentStatus("Converting lightmaps");
+			//prog.setCurrentStatus("Converting lightmaps");
 
 			for (int i = 0; i < header.numLightmaps; ++i)
 			{
 				if (!(i&0xf))
 				{
-					prog.setCurrentPercent(static_cast<float>(i) / static_cast<float>(header.numLightmaps) * 100.0f);
-					if (prog.stopRequested()) throw false;
+					//prog.setCurrentPercent(static_cast<float>(i) / static_cast<float>(header.numLightmaps) * 100.0f);
+					//if (prog.stopRequested()) throw false;
 				}
 
 				RadLMap & lm = lightmaps()[i];
@@ -908,7 +910,7 @@ bool	GeomDB::writeOCT(const fstl::string & filename, ProgressDlg & prog)
 
 		// Write the data
 
-		prog.setCurrentStatus("Saving geometry");
+		//prog.setCurrentStatus("Saving geometry");
 
 		if (header.numVerts     && fwrite(verts,      sizeof(octVert)     * header.numVerts,     1, fp) != 1) throw false;
 		if (header.numFaces     && fwrite(faces,      sizeof(octFace)     * header.numFaces,     1, fp) != 1) throw false;

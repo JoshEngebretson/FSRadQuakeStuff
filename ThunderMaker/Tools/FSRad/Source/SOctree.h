@@ -46,7 +46,7 @@
 // Forward declarations
 // ---------------------------------------------------------------------------------------------------------------------------------
 
-class	ProgressDlg;
+//class	ProgressDlg;
 
 // ---------------------------------------------------------------------------------------------------------------------------------
 
@@ -60,7 +60,7 @@ public:
 		unsigned int			thresholdLimiter;
 		float				minRadiusLimiter;
 		unsigned int			maxDepthLimiter;
-		ProgressDlg *			progressDialog;
+		//ProgressDlg *			progressDialog;
 		unsigned int			maxDepth;
 		unsigned int			originalPolys;
 		unsigned int			totalPolys;
