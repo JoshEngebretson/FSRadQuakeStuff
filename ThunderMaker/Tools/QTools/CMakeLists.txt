@@ -2,39 +2,57 @@
 #set(CMAKE_OSX_ARCHITECTURES "i386")
 
 include_directories(
-	Include
+	qcommon
 )
 
 add_definitions( -DDOUBLEVEC_T=1 )
 
-set (TXQBSP_SRC
+set (QCOMMON_SRC
 
-    brush.c
-    bspfile.c
-    cmdlib.c
-    csg4.c
-    dyna1.c
-    map.c
-    merge.c
-    nodraw.c
-    outside.c
-    portals.c
-    qbsp.c
-    region.c
-    solidbsp.c
-    surfaces.c
-    tjunc.c
-    writebsp.c
+    qcommon/dyna1.c
+    qcommon/bspfile.c
+    qcommon/cmdlib.c
+    qcommon/lbmlib.c
+    qcommon//mathlib.c
+    qcommon/polylib.c
+    qcommon/scriplib.c
+    qcommon/threads.c
+    qcommon/trilib.c
+    qcommon/wadlib.c
 
 )
 
-add_executable(txqbsp ${TXQBSP_SRC})
+set (QBSP_SRC
 
-get_target_property(TXQBSPBIN txqbsp LOCATION)
+    qbsp/brush.c
+    qbsp/csg4.c    
+    qbsp/map.c
+    qbsp/merge.c
+    qbsp/nodraw.c
+    qbsp/outside.c
+    qbsp/portals.c
+    qbsp/qbsp.c
+    qbsp/region.c
+    qbsp/solidbsp.c
+    qbsp/surfaces.c
+    qbsp/tjunc.c
+    qbsp/writebsp.c
+
+)
+
+add_library (qcommon STATIC ${QCOMMON_SRC})
+
+add_executable(qbsp ${QBSP_SRC})
+
+target_link_libraries(qbsp  
+    qcommon        
+)
+
+get_target_property(QBSPBIN qbsp LOCATION)
  
-add_custom_command(TARGET txqbsp
+add_custom_command(TARGET qbsp
     POST_BUILD
-    COMMAND cp ${TXQBSPBIN} ${CMAKE_SOURCE_DIR}/Artifacts/txqbsp
+    COMMAND cp ${QBSPBIN} ${CMAKE_SOURCE_DIR}/Artifacts/qbsp
 )
 
 

@@ -1,54 +1,53 @@
 
-#include "cmdlib.h"
-#include "mathlib.h"
-#include "bspfile.h"
+#include "bsp5.h"
+
 
 //=============================================================================
 
 int			nummodels;
-dmodel_t	dmodels[MAX_MAP_MODELS];
+SetupArray(dmodel_t,	dmodels, MAX_MAP_MODELS);
 
 int			visdatasize;
-byte		dvisdata[MAX_MAP_VISIBILITY];
+SetupArray(byte,	dvisdata, MAX_MAP_VISIBILITY);
 
 int			lightdatasize;
-byte		dlightdata[MAX_MAP_LIGHTING];
+SetupArray(byte,	dlightdata, MAX_MAP_LIGHTING);
 
 int			texdatasize;
-byte		dtexdata[MAX_MAP_MIPTEX]; // (dmiptexlump_t)
+SetupArray(byte,	dtexdata, MAX_MAP_MIPTEX); // (dmiptexlump_t)
 
 int			entdatasize;
-char		dentdata[MAX_MAP_ENTSTRING];
+SetupArray(char,	dentdata, MAX_MAP_ENTSTRING);
 
 int			numleafs;
-dleaf_t		dleafs[MAX_MAP_LEAFS];
+SetupArray(dleaf_t,	dleafs, MAX_MAP_LEAFS);
 
 int			numplanes;
-dplane_t	dplanes[MAX_MAP_PLANES];
+SetupArray(dplane_t,	dplanes, MAX_MAP_PLANES);
 
 int			numvertexes;
-dvertex_t	dvertexes[MAX_MAP_VERTS];
+SetupArray(dvertex_t,	dvertexes, MAX_MAP_VERTS);
 
 int			numnodes;
-dnode_t		dnodes[MAX_MAP_NODES];
+SetupArray(dnode_t,	dnodes, MAX_MAP_NODES);
 
 int			numtexinfo;
-texinfo_t	texinfo[MAX_MAP_TEXINFO];
+SetupArray(texinfo_t,	texinfo, MAX_MAP_TEXINFO);
 
 int			numfaces;
-dface_t		dfaces[MAX_MAP_FACES];
+SetupArray(dface_t,	dfaces, MAX_MAP_FACES);
 
 int			numclipnodes;
-dclipnode_t	dclipnodes[MAX_MAP_CLIPNODES];
+SetupArray(dclipnode_t, dclipnodes, MAX_MAP_CLIPNODES);
 
 int			numedges;
-dedge_t		dedges[MAX_MAP_EDGES];
+SetupArray(dedge_t,	dedges, MAX_MAP_EDGES);
 
 int			nummarksurfaces;
-unsigned short		dmarksurfaces[MAX_MAP_MARKSURFACES];
+SetupArray(unsigned short,dmarksurfaces, MAX_MAP_MARKSURFACES);
 
 int			numsurfedges;
-int			dsurfedges[MAX_MAP_SURFEDGES];
+SetupArray(int, 	dsurfedges, MAX_MAP_SURFEDGES);
 
 //=============================================================================
 
@@ -61,12 +60,12 @@ Byte swaps all data in a bsp file.
 */
 void SwapBSPFile (qboolean todisk)
 {
-	int				i, j, c;
-	dmodel_t		*d;
+	int		i, j, c;
+	dmodel_t	*d;
 	dmiptexlump_t	*mtl;
 
-	
-// models	
+
+// models
 	for (i=0 ; i<nummodels ; i++)
 	{
 		d = &dmodels[i];
@@ -77,7 +76,7 @@ void SwapBSPFile (qboolean todisk)
 		d->visleafs = LittleLong (d->visleafs);
 		d->firstface = LittleLong (d->firstface);
 		d->numfaces = LittleLong (d->numfaces);
-		
+
 		for (j=0 ; j<3 ; j++)
 		{
 			d->mins[j] = LittleFloat(d->mins[j]);
@@ -94,10 +93,10 @@ void SwapBSPFile (qboolean todisk)
 		for (j=0 ; j<3 ; j++)
 			dvertexes[i].point[j] = LittleFloat (dvertexes[i].point[j]);
 	}
-		
+
 //
 // planes
-//	
+//
 	for (i=0 ; i<numplanes ; i++)
 	{
 		for (j=0 ; j<3 ; j++)
@@ -105,10 +104,10 @@ void SwapBSPFile (qboolean todisk)
 		dplanes[i].dist = LittleFloat (dplanes[i].dist);
 		dplanes[i].type = LittleLong (dplanes[i].type);
 	}
-	
+
 //
 // texinfos
-//	
+//
 	for (i=0 ; i<numtexinfo ; i++)
 	{
 		for (j=0 ; j<8 ; j++)
@@ -116,7 +115,7 @@ void SwapBSPFile (qboolean todisk)
 		texinfo[i].miptex = LittleLong (texinfo[i].miptex);
 		texinfo[i].flags = LittleLong (texinfo[i].flags);
 	}
-	
+
 //
 // faces
 //
@@ -188,7 +187,7 @@ void SwapBSPFile (qboolean todisk)
 		for (i=0 ; i<c ; i++)
 			mtl->dataofs[i] = LittleLong(mtl->dataofs[i]);
 	}
-	
+
 //
 // marksurfaces
 //
@@ -216,14 +215,15 @@ dheader_t	*header;
 
 int CopyLump (int lump, void *dest, int size)
 {
-	int		length, ofs;
+	int	length, ofs;
 
 	length = header->lumps[lump].filelen;
 	ofs = header->lumps[lump].fileofs;
-	
+
 	if (length % size)
-		Error ("LoadBSPFile: odd lump size");
-	
+		Message (MSGERR, "LoadBSPFile: Odd lump size");
+
+	NeedArrayBytes(dest, length);
 	memcpy (dest, (byte *)header + ofs, length);
 
 	return length / size;
@@ -236,8 +236,8 @@ LoadBSPFile
 */
 void	LoadBSPFile (char *filename)
 {
-	int			i;
-	
+	int	i;
+
 //
 // load the file header
 //
@@ -248,7 +248,7 @@ void	LoadBSPFile (char *filename)
 		((int *)header)[i] = LittleLong ( ((int *)header)[i]);
 
 	if (header->version != BSPVERSION)
-		Error ("%s is version %i, not %i", filename, i, BSPVERSION);
+		Message (MSGERR, "%s is version %i, not %i", filename, header->version, BSPVERSION);
 
 	nummodels = CopyLump (LUMP_MODELS, dmodels, sizeof(dmodel_t));
 	numvertexes = CopyLump (LUMP_VERTEXES, dvertexes, sizeof(dvertex_t));
@@ -267,28 +267,36 @@ void	LoadBSPFile (char *filename)
 	lightdatasize = CopyLump (LUMP_LIGHTING, dlightdata, 1);
 	entdatasize = CopyLump (LUMP_ENTITIES, dentdata, 1);
 
-	free (header);		// everything has been copied out
-		
+	FreeOther (header);		// everything has been copied out
+
 //
 // swap everything
-//	
+//
 	SwapBSPFile (false);
 }
 
 //============================================================================
 
-FILE		*wadfile;
-dheader_t	outheader;
+FILE	  *wadfile;
+dheader_t outheader;
+char	  *wadfilename;
 
 void AddLump (int lumpnum, void *data, int len)
 {
 	lump_t *lump;
+	int    extra;
+	byte   padd[4] = {0, 0, 0, 0};
 
 	lump = &header->lumps[lumpnum];
-	
+
 	lump->fileofs = LittleLong( ftell(wadfile) );
 	lump->filelen = LittleLong(len);
-	SafeWrite (wadfile, data, (len+3)&~3);
+	SafeWrite (wadfile, wadfilename, data, len);
+
+	extra = ((len + 3) & ~3) - len;
+
+	if (extra > 0)
+		SafeWrite (wadfile, wadfilename, padd, extra); // Padd with zeroes to even 4-byte boundary
 }
 
 /*
@@ -299,16 +307,16 @@ Swaps the bsp file in place, so it should not be referenced again
 =============
 */
 void	WriteBSPFile (char *filename)
-{		
+{
 	header = &outheader;
 	memset (header, 0, sizeof(dheader_t));
-	
+
 	SwapBSPFile (true);
 
 	header->version = LittleLong (BSPVERSION);
-	
-	wadfile = SafeOpenWrite (filename);
-	SafeWrite (wadfile, header, sizeof(dheader_t));	// overwritten later
+
+	wadfile = SafeOpen (filename, "wb", true, &wadfilename);
+	SafeWrite (wadfile, wadfilename, header, sizeof(dheader_t)); // overwritten later
 
 	AddLump (LUMP_PLANES, dplanes, numplanes*sizeof(dplane_t));
 	AddLump (LUMP_LEAFS, dleafs, numleafs*sizeof(dleaf_t));
@@ -326,10 +334,10 @@ void	WriteBSPFile (char *filename)
 	AddLump (LUMP_VISIBILITY, dvisdata, visdatasize);
 	AddLump (LUMP_ENTITIES, dentdata, entdatasize);
 	AddLump (LUMP_TEXTURES, dtexdata, texdatasize);
-	
-	fseek (wadfile, 0, SEEK_SET);
-	SafeWrite (wadfile, header, sizeof(dheader_t));
-	fclose (wadfile);	
+
+	SafeSeek (wadfile, wadfilename, 0);
+	SafeWrite (wadfile, wadfilename, header, sizeof(dheader_t));
+	SafeClose (wadfile, wadfilename);
 }
 
 //============================================================================
@@ -343,33 +351,31 @@ Dumps info about current file
 */
 void PrintBSPFileSizes (void)
 {
-	printf ("%5i planes       %6i\n"
+	Message (MSGNOVERBOSE, "%6i planes      %7i"
 		,numplanes, (int)(numplanes*sizeof(dplane_t)));
-	printf ("%5i vertexes     %6i\n"
+	Message (MSGNOVERBOSE, "%6i vertexes    %7i"
 		,numvertexes, (int)(numvertexes*sizeof(dvertex_t)));
-	printf ("%5i nodes        %6i\n"
+	Message (MSGNOVERBOSE, "%6i nodes       %7i"
 		,numnodes, (int)(numnodes*sizeof(dnode_t)));
-	printf ("%5i texinfo      %6i\n"
+	Message (MSGNOVERBOSE, "%6i texinfo     %7i"
 		,numtexinfo, (int)(numtexinfo*sizeof(texinfo_t)));
-	printf ("%5i faces        %6i\n"
+	Message (MSGNOVERBOSE, "%6i faces       %7i"
 		,numfaces, (int)(numfaces*sizeof(dface_t)));
-	printf ("%5i clipnodes    %6i\n"
+	Message (MSGNOVERBOSE, "%6i clipnodes   %7i"
 		,numclipnodes, (int)(numclipnodes*sizeof(dclipnode_t)));
-	printf ("%5i leafs        %6i\n"
+	Message (MSGNOVERBOSE, "%6i leafs       %7i"
 		,numleafs, (int)(numleafs*sizeof(dleaf_t)));
-	printf ("%5i marksurfaces %6i\n"
+	Message (MSGNOVERBOSE, "%6i marksurfaces%7i"
 		,nummarksurfaces, (int)(nummarksurfaces*sizeof(dmarksurfaces[0])));
-	printf ("%5i surfedges    %6i\n"
-		,numsurfedges, (int)(numsurfedges*sizeof(dmarksurfaces[0])));
-	printf ("%5i edges        %6i\n"
+	Message (MSGNOVERBOSE, "%6i surfedges   %7i"
+		,numsurfedges, (int)(numsurfedges*sizeof(dsurfedges[0])));
+	Message (MSGNOVERBOSE, "%6i edges       %7i"
 		,numedges, (int)(numedges*sizeof(dedge_t)));
-	if (!texdatasize)
-		printf ("    0 textures          0\n");
-	else
-		printf ("%5i textures     %6i\n",((dmiptexlump_t*)dtexdata)->nummiptex, texdatasize);
-	printf ("      lightdata    %6i\n", lightdatasize);
-	printf ("      visdata      %6i\n", visdatasize);
-	printf ("      entdata      %6i\n", entdatasize);
+
+	Message (MSGNOVERBOSE, "%6i textures  %9i", texdatasize ? ((dmiptexlump_t *)dtexdata)->nummiptex : 0, texdatasize);
+	Message (MSGNOVERBOSE, "%6s lightdata %9i", "", lightdatasize);
+	Message (MSGNOVERBOSE, "%6s visdata   %9i", "", visdatasize);
+	Message (MSGNOVERBOSE, "%6s entdata   %9i", "", entdatasize);
 }
 
 

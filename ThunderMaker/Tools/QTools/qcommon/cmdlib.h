@@ -3,6 +3,8 @@
 #ifndef __CMDLIB__
 #define __CMDLIB__
 
+#pragma warning( disable : 4244 4305)
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -10,6 +12,7 @@
 #include <ctype.h>
 #include <time.h>
 #include <stdarg.h>
+
 
 #ifndef __BYTEBOOL__
 #define __BYTEBOOL__
@@ -21,77 +24,42 @@ typedef unsigned char byte;
 #define myoffsetof(type,identifier) ((size_t)&((type *)0)->identifier)
 
 
-// set these before calling CheckParm
-extern int myargc;
-extern char **myargv;
-
-char *strupr (char *in);
-char *strlower (char *in);
-int Q_strncasecmp (char *s1, char *s2, int n);
-int Q_strcasecmp (char *s1, char *s2);
-void Q_getwd (char *out);
+#define Q_strncasecmp strnicmp
+#define Q_strcasecmp stricmp
 
 int filelength (FILE *f);
-int	FileTime (char *path);
-
-void	Q_mkdir (char *path);
-
-extern	char		qdir[1024];
-extern	char		gamedir[1024];
-void SetQdirFromPath (char *path);
-char *ExpandPath (char *path);
-char *ExpandPathAndArchive (char *path);
-
 
 double I_FloatTime (void);
 
 void	Error (char *error, ...);
-int		CheckParm (char *check);
 
-FILE	*SafeOpenWrite (char *filename);
-FILE	*SafeOpenRead (char *filename);
-void	SafeRead (FILE *f, void *buffer, int count);
-void	SafeWrite (FILE *f, void *buffer, int count);
+FILE	*SafeOpen (char *filename, char *Mode, qboolean Abort, char **SaveName);
+void	SafeClose (FILE *f, char *filename);
+void	SafeFlush (FILE *f);
+void	SafeSeek (FILE *f, char *filename, long pos);
+void	SafeRead (FILE *f, char *filename, void *buffer, int count);
+void	SafeWrite (FILE *f, char *filename, void *buffer, int count);
+void	SafePrintf (FILE *f, char *filename, char *Format, ...);
 
-int		LoadFile (char *filename, void **bufferptr);
+int	LoadFile (char *filename, void **bufferptr);
 void	SaveFile (char *filename, void *buffer, int count);
 
-void 	DefaultExtension (char *path, char *extension);
-void 	DefaultPath (char *path, char *basepath);
-void 	StripFilename (char *path);
-void 	StripExtension (char *path);
+void	DefaultExtension (char *path, char *extension);
+void	StripExtension (char *path);
 
-void 	ExtractFilePath (char *path, char *dest);
-void 	ExtractFileBase (char *path, char *dest);
-void	ExtractFileExtension (char *path, char *dest);
-
-int 	ParseNum (char *str);
+int	ParseNum (char *str);
 
 short	BigShort (short l);
-short	LittleShort (short l);
-int		BigLong (int l);
-int		LittleLong (int l);
+#define LittleShort(a) a
+int	BigLong (int l);
+#define LittleLong(a) a
 float	BigFloat (float l);
-float	LittleFloat (float l);
+#define LittleFloat(a) a
 
 
-char *COM_Parse (char *data);
+char    *copystring(char *s);
 
-extern	char		com_token[1024];
-extern	qboolean	com_eof;
-
-char *copystring(char *s);
-
-
-void CRC_Init(unsigned short *crcvalue);
-void CRC_ProcessByte(unsigned short *crcvalue, byte data);
-unsigned short CRC_Value(unsigned short crcvalue);
-
-void	CreatePath (char *path);
-void CopyFile (char *from, char *to);
-
-extern	qboolean		archive;
-extern	char			archivedir[1024];
-
+void	SetQPriority(int Priority);
+void	ShowBar(int Current, int Total);
 
 #endif
