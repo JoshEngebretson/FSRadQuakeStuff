@@ -150,8 +150,19 @@ void	RadLMap::writeRaw(const fstl::string & folder)
 	fstl::string	fname = folder;
 	if (fname[fname.length() - 1] != '/') fname += "/";
 	//fname += fstl::string(id()) + " - " + fstl::string(width()) + "x" + fstl::string(height()) + ".raw";
-	fname += fstl::string(id()) + " - " + fstl::string(width()) + "x" + fstl::string(height()) + ".png";
-	stbi_write_png(fname.asArray(), width(), height(), 1, (const void *) data().ptr(), 12);
+	fname += fstl::string(id()) + " - " + fstl::string(width()) + "x" + fstl::string(height()) + ".tga";
+
+	unsigned char buffer[width() * height() * 3];
+	int i = 0;
+	for (unsigned int j = 0; j < width() * height(); ++j)
+	{
+		buffer[i++] = static_cast<unsigned char>(data()[j].b());
+		buffer[i++] = static_cast<unsigned char>(data()[j].g());
+		buffer[i++] = static_cast<unsigned char>(data()[j].r());
+	}
+
+
+	stbi_write_tga(fname.asArray(), width(), height(), 3, (const void *) buffer);
 
 /*
 	FILE *fp = fopen(fname.asArray(), "wb");

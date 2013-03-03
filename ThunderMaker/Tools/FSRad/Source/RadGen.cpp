@@ -684,7 +684,7 @@ bool	RadGen::processEnergy(SOctree & node)
 
 		// Update the user
 
-		//if (!updateStats(*progress())) return false;
+		if (!updateStats()) return false;
 
 		// Find potential receivers
 
@@ -757,7 +757,7 @@ geom::Color3	RadGen::calcRemainingEnergy()
 
 bool	RadGen::updateStats(const bool checkConvergence)
 {
-	/*
+	
 	const	float	displayMultiplier = static_cast<float>(areaLightMultiplier());
 
 	geom::Color3	ie = initialEnergy();
@@ -771,20 +771,21 @@ bool	RadGen::updateStats(const bool checkConvergence)
 
 	float	percentThisPass = energyThisPass() / remaining * 100;
 	float	percentEnergy = absorbed / (initial - escaped) * 100;
-	prog.setCurrentPercent(percentEnergy);
 
-	prog.setLabel1("Iterations:");
+	//prog.setCurrentPercent(percentEnergy);
+
+	//prog.setLabel1("Iterations:");
 	if (maxIterations())
 	{
-		prog.setText1(fstl::string(iterationsProcessed()) + " of " + fstl::string(maxIterationsCount()));
+		//prog.setText1(fstl::string(iterationsProcessed()) + " of " + fstl::string(maxIterationsCount()));
 	}
 	else
 	{
-		prog.setText1(fstl::string(iterationsProcessed()));
+		//prog.setText1(fstl::string(iterationsProcessed()));
 	}
 
-	prog.setLabel2("Initial (abs/esc) Energy:");
-	char	disp[MAX_PATH];
+	//prog.setLabel2("Initial (abs/esc) Energy:");
+	char	disp[4096];
 	if (lightsToProcess())
 	{
 		sprintf(disp, "[processing lights]");
@@ -793,62 +794,62 @@ bool	RadGen::updateStats(const bool checkConvergence)
 	{
 		sprintf(disp, "%u (%.2f%% / %.2f%%)", static_cast<unsigned int>(initial * displayMultiplier), absorbed/initial*100, escaped/initial*100);
 	}
-	prog.setText2(disp);
+	//prog.setText2(disp);
 
-	prog.setLabel3("Energy remaining:");
-	prog.setText3(fstl::string(static_cast<unsigned int>(remaining * displayMultiplier)));
+	//prog.setLabel3("Energy remaining:");
+	//prog.setText3(fstl::string(static_cast<unsigned int>(remaining * displayMultiplier)));
 
-	prog.setLabel4("Convergence target:");
+	//prog.setLabel4("Convergence target:");
 
 	if (checkConvergence && !directLightOnly())
 	{
 		sprintf(disp, "%u (%.5f%%)", convergence(), static_cast<float>(convergence()) / (energyThisPass() * displayMultiplier) * 100);
-		prog.setText4(disp);
+		//prog.setText4(disp);
 	}
 	else
 	{
-		if (directLightOnly())	prog.setText4("N/A (direct light only)");
-		else			prog.setText4("N/A");
+		//if (directLightOnly())	prog.setText4("N/A (direct light only)");
+		//else			prog.setText4("N/A");
 	}
 
-	prog.setLabel5("Energy shot this pass:");
+	//prog.setLabel5("Energy shot this pass:");
 	sprintf(disp, "%.2f", energyThisPass() * displayMultiplier);
-	prog.setText5(disp);
+	//prog.setText5(disp);
 
-	prog.setLabel6("Form factor calculation method:");
+	//prog.setLabel6("Form factor calculation method:");
 	if (lightsToProcess())
 	{
-		prog.setText6("Point light estimation");
+		//prog.setText6("Point light estimation");
 	}
 	else
 	{
-		if (useNusselt())	prog.setText6("Nusselt's Analogy");
-		else			prog.setText6("Standard estimation");
+		//if (useNusselt())	prog.setText6("Nusselt's Analogy");
+		//else			prog.setText6("Standard estimation");
 	}
 
-	prog.setLabel7("Input file:");
+	//prog.setLabel7("Input file:");
 	fstl::string	ifn = inputFilename();
 	int	idx = ifn.rfind("\\");
 	if (idx != -1) ifn = ifn.substring(idx+1);
-	prog.setText7(ifn);
+	//prog.setText7(ifn);
 
 	if (adaptivePatchSubdivision())
 	{
-		prog.setLabel8("Adaptive subdivision threshold:");
+		//prog.setLabel8("Adaptive subdivision threshold:");
 		sprintf(disp, "%u (%.3f%% there)", adaptiveThreshold(), adaptiveThreshold() / (energyThisPass() * displayMultiplier) * 100);
-		prog.setText8(disp);
+		//prog.setText8(disp);
 	}
 	else
 	{
-		prog.setLabel8("");
-		prog.setText8("");
+		//prog.setLabel8("");
+		//prog.setText8("");
 	}
 
-	prog.setLabel9("Total patches:");
-	prog.setText9(fstl::string(totalPatches()) + " (cur: " + fstl::string(subdivisionU()) + "x" + fstl::string(subdivisionV()) + ", max: " + fstl::string(adaptiveMaxSubdivisionU()) + "x" + fstl::string(adaptiveMaxSubdivisionV()) + ")");
+	//prog.setLabel9("Total patches:");
+	//prog.setText9(fstl::string(totalPatches()) + " (cur: " + fstl::string(subdivisionU()) + "x" + fstl::string(subdivisionV()) + ", max: " + fstl::string(adaptiveMaxSubdivisionU()) + "x" + fstl::string(adaptiveMaxSubdivisionV()) + ")");
 
-	prog.setLabel10("Total elements:");
-	prog.setText10(fstl::string(totalElements()));
+	//prog.setLabel10("Total elements:");
+	//prog.setText10(fstl::string(totalElements()));
 
 	// If they've reached convergence, tell them to stop
 	//
@@ -859,8 +860,8 @@ bool	RadGen::updateStats(const bool checkConvergence)
 
 	// Or tell them to stop when the user requests it...
 
-	return !prog.stopRequested();
-	*/
+	//return !prog.stopRequested();
+	
 	return true;
 }
 
@@ -1398,7 +1399,7 @@ void	RadGen::go()
 		iterationsProcessed() = 0;
 		initialEnergy() = calcTotalEnergy();
 		energyThisPass() = 0;
-		//updateStats(*progress());
+		updateStats();
 		lightsToProcess() = geometry().lights().size() != 0;
 
 		// Run the ratiosity process
@@ -1561,7 +1562,7 @@ void	RadGen::readDefaultParms()
 	subdivisionV() = 4;//theApp.GetProfileInt("Options", "subdivisionV", 4);
 	ambientTerm() = true;//theApp.GetProfileInt("Options", "ambientTerm", 1) ? true:false;
 	useNusselt() = false;//theApp.GetProfileInt("Options", "useNusselt", 0) ? true:false;
-	directLightOnly() = true;//theApp.GetProfileInt("Options", "directLightOnly", 0) ? true:false;
+	directLightOnly() = false;//theApp.GetProfileInt("Options", "directLightOnly", 0) ? true:false;
 	adaptiveMaxSubdivisionU() = 256;//theApp.GetProfileInt("Options", "adaptiveMaxSubdivisionU", 256);
 	adaptiveMaxSubdivisionV() = 256;//theApp.GetProfileInt("Options", "adaptiveMaxSubdivisionV", 256);
 	adaptivePatchSubdivision() = true;//theApp.GetProfileInt("Options", "adaptivePatchSubdivision", 1) ? true:false;
@@ -1571,12 +1572,12 @@ void	RadGen::readDefaultParms()
 
 	// Post-processing parms
 
-	gamma() = 0;//static_cast<float>(theApp.GetProfileInt("Options", "gamma", 0)) / 100.0f;
-	ambient().r() = 1;//static_cast<float>(theApp.GetProfileInt("Options", "rAmbient", 0));
-	ambient().g() = 1;//static_cast<float>(theApp.GetProfileInt("Options", "gAmbient", 0));
-	ambient().b() = 1;//static_cast<float>(theApp.GetProfileInt("Options", "bAmbient", 0));
+	gamma() = 1;//static_cast<float>(theApp.GetProfileInt("Options", "gamma", 0)) / 100.0f;
+	ambient().r() = 0;//static_cast<float>(theApp.GetProfileInt("Options", "rAmbient", 0));
+	ambient().g() = 0;//static_cast<float>(theApp.GetProfileInt("Options", "gAmbient", 0));
+	ambient().b() = 0;//static_cast<float>(theApp.GetProfileInt("Options", "bAmbient", 0));
 
-	clamping() = ClampNone;
+	clamping() = ClampRetain;//ClampNone;
 
 /*
 	switch(theApp.GetProfileInt("Options", "clamping", RadGen::ClampNone))

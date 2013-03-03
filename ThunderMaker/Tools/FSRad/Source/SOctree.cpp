@@ -74,6 +74,11 @@ static	geom::Point3	planeCenterOffsets[] =
 
 static	bool	updateDisplay(SOctree::sBuildInfo &buildInfo, const unsigned int depth, const bool forceUpdate = false)
 {
+	if (depth > buildInfo.maxDepth)
+	{
+		buildInfo.maxDepth = depth;
+
+	}
 	/*
 	if (!buildInfo.progressDialog) return true;
 

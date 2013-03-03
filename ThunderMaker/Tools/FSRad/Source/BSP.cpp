@@ -473,6 +473,11 @@ static	bool	bisectScene(BSP::sBuildInfo & buildInfo, const geom::Plane3 & plane,
 
 static	bool	updateDisplay(BSP::sBuildInfo &buildInfo, const unsigned int depth)
 {
+	if (depth > buildInfo.maxDepth)
+	{
+		buildInfo.maxDepth = depth;
+	}
+
 	#ifdef FSRAD_WINDOWS_DISABLE
 
 	if (!buildInfo.progressDialog) return true;
