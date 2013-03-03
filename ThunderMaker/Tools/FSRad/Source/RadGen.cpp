@@ -1527,7 +1527,7 @@ void	RadGen::readDefaultParms()
 
 	// Octree parameters
 
-	octreeThreshold() = 50000;//theApp.GetProfileInt("Options", "OctreePolysPerNode", 50000);
+	octreeThreshold() = 1000000;//theApp.GetProfileInt("Options", "OctreePolysPerNode", 50000);
 	octreeMaxDepth() = 50;//theApp.GetProfileInt("Options", "OctreeMaxDepth", 50);
 	octreeMinRadius() = 5.0f;//static_cast<float>(atof(theApp.GetProfileString("Options", "OctreeMinRadius", "5.0")));
 
