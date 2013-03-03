@@ -83,6 +83,9 @@ CalcAmbientSounds(void)
     float dists[NUM_AMBIENTS];
     float vol;
 
+    logprint("WARNING: CalcAmbientSounds disabled due to crash with Q_strncasecmp on miptex name\n");
+    return;
+
     for (i = 0; i < portalleafs_real; i++) {
 	leaf = &dleafs[i + 1];
 
@@ -108,6 +111,12 @@ CalcAmbientSounds(void)
 		info = &texinfo[surf->texinfo];
 		ofs = ((dmiptexlump_t *)dtexdata)->dataofs[info->miptex];
 		miptex = (miptex_t *)(&dtexdata[ofs]);
+
+		if (!miptex->name)
+		{
+			logprint("WARNING: miptex with no name\n");
+			continue;
+		}
 
 		if (!Q_strncasecmp(miptex->name, "*water", 6))
 		    ambient_type = AMBIENT_WATER;
