@@ -32,6 +32,7 @@
 
 #include "stdafx.h"
 #include "RadLMap.h"
+#include "stb_image_write.h"
 
 // ---------------------------------------------------------------------------------------------------------------------------------
 
@@ -147,8 +148,12 @@ void	RadLMap::addAmbient(const geom::Color3 & ambient)
 void	RadLMap::writeRaw(const fstl::string & folder)
 {
 	fstl::string	fname = folder;
-	if (fname[fname.length() - 1] != '\\') fname += "\\";
-	fname += fstl::string(id()) + " - " + fstl::string(width()) + "x" + fstl::string(height()) + ".raw";
+	if (fname[fname.length() - 1] != '/') fname += "/";
+	//fname += fstl::string(id()) + " - " + fstl::string(width()) + "x" + fstl::string(height()) + ".raw";
+	fname += fstl::string(id()) + " - " + fstl::string(width()) + "x" + fstl::string(height()) + ".png";
+	stbi_write_png(fname.asArray(), width(), height(), 1, (const void *) data().ptr(), 12);
+
+/*
 	FILE *fp = fopen(fname.asArray(), "wb");
 
 	if (fp)
@@ -164,6 +169,7 @@ void	RadLMap::writeRaw(const fstl::string & folder)
 		}
 		fclose(fp);
 	}
+*/	
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------

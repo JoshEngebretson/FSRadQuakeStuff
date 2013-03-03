@@ -598,6 +598,8 @@ inline		void		reserve(const unsigned int len)
 					_reserved = len;
 				}
 
+inline       const T* ptr() { return _buf; }
+
 	// Accessors
 
 inline	const	unsigned int	size() const {return _size;}

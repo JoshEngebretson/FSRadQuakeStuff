@@ -20,6 +20,7 @@ set (FSRAD_SRC
     Source/SOctree.cpp
     Source/LMapGen.cpp
     Source/RadGen.cpp
+    Source/stb_image_write.c
 
 )
 

@@ -1544,7 +1544,7 @@ void	RadGen::readDefaultParms()
 
 	// Input/output parameters
 
-	writeRawLightmapsFolder() = "";//fstl::string(theApp.GetProfileString("Options", "outputRawDirectory", desktopPath));
+	writeRawLightmapsFolder() = desktopPath;//fstl::string(theApp.GetProfileString("Options", "outputRawDirectory", desktopPath));
 	writeRawLightmaps() = true;//theApp.GetProfileInt("Options", "outputRawDirectoryFlag", 0) ? true:false;
 	writeOctFile() = true;//theApp.GetProfileInt("Options", "outputOctFileFlag", 1) ? true:false;
 	writeOctFilename() = "output.oct"; //fstl::string(theApp.GetProfileString("Options", "outputOctFilename", defaultOctOutput.asArray()));
@@ -1561,7 +1561,7 @@ void	RadGen::readDefaultParms()
 	subdivisionV() = 4;//theApp.GetProfileInt("Options", "subdivisionV", 4);
 	ambientTerm() = true;//theApp.GetProfileInt("Options", "ambientTerm", 1) ? true:false;
 	useNusselt() = false;//theApp.GetProfileInt("Options", "useNusselt", 0) ? true:false;
-	directLightOnly() = false;//theApp.GetProfileInt("Options", "directLightOnly", 0) ? true:false;
+	directLightOnly() = true;//theApp.GetProfileInt("Options", "directLightOnly", 0) ? true:false;
 	adaptiveMaxSubdivisionU() = 256;//theApp.GetProfileInt("Options", "adaptiveMaxSubdivisionU", 256);
 	adaptiveMaxSubdivisionV() = 256;//theApp.GetProfileInt("Options", "adaptiveMaxSubdivisionV", 256);
 	adaptivePatchSubdivision() = true;//theApp.GetProfileInt("Options", "adaptivePatchSubdivision", 1) ? true:false;
@@ -1572,9 +1572,9 @@ void	RadGen::readDefaultParms()
 	// Post-processing parms
 
 	gamma() = 0;//static_cast<float>(theApp.GetProfileInt("Options", "gamma", 0)) / 100.0f;
-	ambient().r() = 0;//static_cast<float>(theApp.GetProfileInt("Options", "rAmbient", 0));
-	ambient().g() = 0;//static_cast<float>(theApp.GetProfileInt("Options", "gAmbient", 0));
-	ambient().b() = 0;//static_cast<float>(theApp.GetProfileInt("Options", "bAmbient", 0));
+	ambient().r() = 1;//static_cast<float>(theApp.GetProfileInt("Options", "rAmbient", 0));
+	ambient().g() = 1;//static_cast<float>(theApp.GetProfileInt("Options", "gAmbient", 0));
+	ambient().b() = 1;//static_cast<float>(theApp.GetProfileInt("Options", "bAmbient", 0));
 
 	clamping() = ClampNone;
 
