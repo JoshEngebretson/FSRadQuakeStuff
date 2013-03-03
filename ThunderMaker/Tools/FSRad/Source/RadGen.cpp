@@ -1553,9 +1553,9 @@ void	RadGen::readDefaultParms()
 
 	// General parms
 
-	convergence() = 10;//theApp.GetProfileInt("Options", "convergence", 10);
+	convergence() = 1;//theApp.GetProfileInt("Options", "convergence", 10);
 	maxIterations() = false;//theApp.GetProfileInt("Options", "enableMaxIterations", 0) ? true:false;
-	maxIterationsCount() = 1000;//theApp.GetProfileInt("Options", "maxIterationsCount", 1000);
+	maxIterationsCount() = 1024;//theApp.GetProfileInt("Options", "maxIterationsCount", 1000);
 	areaLightMultiplier() = 1000000;//theApp.GetProfileInt("Options", "areaLightMultiplier", 1000000);
 	pointLightMultiplier() = 0.6f;//static_cast<float>(atof(theApp.GetProfileString("Options", "pointLightMultiplier", "0.6")));
 	subdivisionU() = 4;//theApp.GetProfileInt("Options", "subdivisionU", 4);
@@ -1563,8 +1563,8 @@ void	RadGen::readDefaultParms()
 	ambientTerm() = true;//theApp.GetProfileInt("Options", "ambientTerm", 1) ? true:false;
 	useNusselt() = false;//theApp.GetProfileInt("Options", "useNusselt", 0) ? true:false;
 	directLightOnly() = false;//theApp.GetProfileInt("Options", "directLightOnly", 0) ? true:false;
-	adaptiveMaxSubdivisionU() = 256;//theApp.GetProfileInt("Options", "adaptiveMaxSubdivisionU", 256);
-	adaptiveMaxSubdivisionV() = 256;//theApp.GetProfileInt("Options", "adaptiveMaxSubdivisionV", 256);
+	adaptiveMaxSubdivisionU() = 128;//theApp.GetProfileInt("Options", "adaptiveMaxSubdivisionU", 256);
+	adaptiveMaxSubdivisionV() = 128;//theApp.GetProfileInt("Options", "adaptiveMaxSubdivisionV", 256);
 	adaptivePatchSubdivision() = true;//theApp.GetProfileInt("Options", "adaptivePatchSubdivision", 1) ? true:false;
 	adaptiveThreshold() = 15;//theApp.GetProfileInt("Options", "adaptiveThreshold", 15);
 
@@ -1573,9 +1573,9 @@ void	RadGen::readDefaultParms()
 	// Post-processing parms
 
 	gamma() = 1;//static_cast<float>(theApp.GetProfileInt("Options", "gamma", 0)) / 100.0f;
-	ambient().r() = 0;//static_cast<float>(theApp.GetProfileInt("Options", "rAmbient", 0));
-	ambient().g() = 0;//static_cast<float>(theApp.GetProfileInt("Options", "gAmbient", 0));
-	ambient().b() = 0;//static_cast<float>(theApp.GetProfileInt("Options", "bAmbient", 0));
+	ambient().r() = 0.0;//static_cast<float>(theApp.GetProfileInt("Options", "rAmbient", 0));
+	ambient().g() = 0.0;//static_cast<float>(theApp.GetProfileInt("Options", "gAmbient", 0));
+	ambient().b() = 0.0;//static_cast<float>(theApp.GetProfileInt("Options", "bAmbient", 0));
 
 	clamping() = ClampRetain;//ClampNone;
 

@@ -1,5 +1,5 @@
 
-set(CMAKE_OSX_ARCHITECTURES "i386")
+#set(CMAKE_OSX_ARCHITECTURES "i386")
 
 include_directories(
 	Include
