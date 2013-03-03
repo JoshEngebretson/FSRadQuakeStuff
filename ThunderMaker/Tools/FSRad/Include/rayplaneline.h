@@ -42,8 +42,8 @@
 // Module setup (required includes, macros, etc.)
 // ---------------------------------------------------------------------------------------------------------------------------------
 
-#include "common"
-#include "../../Include/fstl/fstl"
+#include "common.h"
+#include "fstl.h"
 
 GEOM_NAMESPACE_BEGIN
 

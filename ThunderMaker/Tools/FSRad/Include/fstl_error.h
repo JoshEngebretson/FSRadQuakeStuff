@@ -33,9 +33,9 @@
 // Module setup (required includes, macros, etc.)
 // ---------------------------------------------------------------------------------------------------------------------------------
 
-#include "common"
-#include "string"
-#include "array"
+#include "fstl_common.h"
+#include "fstl_string.h"
+#include "fstl_array.h"
 
 FSTL_NAMESPACE_BEGIN
 
@@ -128,7 +128,6 @@ private:
 };
 
 typedef	basic_error<string>	error;
-typedef	basic_error<wstring>	werror;
 
 FSTL_NAMESPACE_END
 #endif // _FSTL_ERROR

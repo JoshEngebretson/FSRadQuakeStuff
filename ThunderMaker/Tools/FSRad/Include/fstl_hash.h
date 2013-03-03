@@ -35,9 +35,9 @@
 // Module setup (required includes, macros, etc.)
 // ---------------------------------------------------------------------------------------------------------------------------------
 
-#include "common"
-#include "list"
-#include "array"
+#include "fstl_common.h"
+#include "fstl_list.h"
+#include "fstl_array.h"
 
 FSTL_NAMESPACE_BEGIN
 
@@ -122,13 +122,13 @@ inline		void		erase()
 					_size = 0;
 				}
 
-inline		T &		get(const unsigned int id)
+inline			T& get(const unsigned int id)
 				{
 					// Go find this node in the hash
 					
-					list<node,G> &		l = locateList(id);
-					list<node,G>::node *	n = locateNode(l, id);
+					list<node,G> &l = locateList(id);
 					
+					typename list<node,G>::node *n = locateNode(l, id);
 					// Found?
 
 					if (n) return n->data().data();
@@ -138,7 +138,9 @@ inline		T &		get(const unsigned int id)
 					++_size;
 					node	temp;
 					temp.id() = id;
+
 					return l.insert(temp)->data().data();
+
 				}
 				
 inline		bool		remove(const unsigned int id)
@@ -146,7 +148,7 @@ inline		bool		remove(const unsigned int id)
 					// Go find this node in the hash
 					
 					list<node,G> &		l = locateList(id);
-					list<node,G>::node *	n = locateNode(l, id);
+					typename list<node,G>::node *	n = locateNode(l, id);
 
 					// Not found?
 
@@ -162,7 +164,7 @@ inline		bool		remove(const unsigned int id)
 inline		bool		exist(const unsigned int id)
 				{
 					list<node,G> &		l = locateList(id);
-					list<node,G>::node *	n = locateNode(l, id);
+					typename list<node,G>::node *	n = locateNode(l, id);
 					return n ? true:false;
 				}
 
@@ -186,11 +188,11 @@ inline		list<node,G> &	locateList(const unsigned int id)
 					return _table[hashIndex(id)];
 				}
 				
-inline		list<node,G>::node * locateNode(list<node,G> & l, const unsigned int id)
+inline		typename list<node,G>::node * locateNode(list<node,G> & l, const unsigned int id)
 				{
 					// Scan the given list for a node with the given id
 
-					list<node,G>::node * ptr = l.head();
+					typename list<node,G>::node * ptr = l.head();
 					while(ptr)
 					{
 						if (ptr->data().id() == id) return ptr;
@@ -199,7 +201,7 @@ inline		list<node,G>::node * locateNode(list<node,G> & l, const unsigned int id)
 
 					// Not found, return null
 
-					return static_cast<list<node, G>::node *>(0);
+					return static_cast<typename list<node, G>::node *>(0);
 				}
 	// The hash table
 

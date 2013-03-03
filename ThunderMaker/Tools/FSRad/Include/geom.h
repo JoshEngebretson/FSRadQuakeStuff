@@ -45,11 +45,11 @@
 // Module setup (required includes, macros, etc.)
 // ---------------------------------------------------------------------------------------------------------------------------------
 
-#include "common"
-#include "vmath"
-#include "3dutils"
-#include "rayplaneline"
-#include "primitive"
+#include "common.h"
+#include "vmath.h"
+#include "3dutils.h"
+#include "rayplaneline.h"
+#include "primitive.h"
 
 #endif // _GEOM_GEOM
 // ---------------------------------------------------------------------------------------------------------------------------------

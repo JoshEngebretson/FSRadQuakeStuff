@@ -38,7 +38,7 @@
 // ---------------------------------------------------------------------------------------------------------------------------------
 
 #include <new>
-#include "common"
+#include "fstl_common.h"
 
 FSTL_NAMESPACE_BEGIN
 
@@ -133,7 +133,8 @@ inline	T *	allocate(const unsigned int count)
 	#ifdef	UNICODE
 	if (!ptr) throwstring(_T(""), _T("Out of memory"));
 	#else
-	if (!ptr) throwstring("", "Out of memory");
+	assert(0);
+	//if (!ptr) throwstring("", "Out of memory");
 	#endif
 	return	ptr;
 }
@@ -359,46 +360,32 @@ inline	T	rand(const T min, const T max)
 // ---------------------------------------------------------------------------------------------------------------------------------
 
 inline	int		atoi(const char * str)						{return ::atoi(str);}
-inline	int		atoi(const wchar_t * str)					{return ::_wtoi(str);}
 
 inline	long		atol(const char * str)						{return ::atol(str);}
-inline	long		atol(const wchar_t * str)					{return ::_wtol(str);}
 
 inline	double		atof(const char * str)						{return ::atof(str);}
-inline	double		atof(const wchar_t * str)					{return ::_wtof(str);}
 
 inline	size_t		strlen(const char * a)						{return ::strlen(a);}
-inline	size_t		strlen(const wchar_t * a)					{return ::wcslen(a);}
 
 inline	char *		strcpy(char * a, const char * b)				{return ::strcpy(a,b);}
-inline	wchar_t *	strcpy(wchar_t * a, const wchar_t * b)				{return ::wcscpy(a,b);}
 
 inline	char *		strncpy(char * a, const char * b, size_t c)			{return ::strncpy(a,b,c);}
-inline	wchar_t *	strncpy(wchar_t * a, const wchar_t * b, size_t c)		{return ::wcsncpy(a,b,c);}
 
 inline	int		strcmp(const char * a, const char * b)				{return ::strcmp(a,b);}
-inline	int		strcmp(const wchar_t * a, const wchar_t * b)			{return ::wcscmp(a,b);}
 
 inline	int		strncmp(const char * a, const char * b, size_t c)		{return ::strncmp(a,b,c);}
-inline	int		strncmp(const wchar_t * a, const wchar_t * b, size_t c)		{return ::wcsncmp(a,b,c);}
 
-inline	int		stricmp(const char * a, const char * b)				{return ::stricmp(a,b);}
-inline	int		stricmp(const wchar_t * a, const wchar_t * b)			{return ::wcsicmp(a,b);}
+inline	int		stricmp(const char * a, const char * b)				{return ::strcasecmp(a,b);}
 
-inline	int		strnicmp(const char * a, const char * b, size_t c)		{return ::strnicmp(a,b,c);}
-inline	int		strnicmp(const wchar_t * a, const wchar_t * b, size_t c)	{return ::wcsnicmp(a,b,c);}
+inline	int		strnicmp(const char * a, const char * b, size_t c)		{return ::strncasecmp(a,b,c);}
 
 inline	char *		strstr(const char * a, const char * b)				{return ::strstr(a,b);}
-inline	wchar_t *	strstr(const wchar_t * a, const wchar_t * b)			{return ::wcsstr(a,b);}
 
 inline	char *		strchr(const char * a, int b)					{return ::strchr(a,b);}
-inline	wchar_t *	strchr(const wchar_t * a, int b)				{return ::wcschr(a,b);}
 
 inline	size_t		strcspn(const char * a, const char * b)				{return ::strcspn(a,b);}
-inline	size_t		strcspn(const wchar_t * a, const wchar_t * b)			{return ::wcscspn(a,b);}
 
 inline	size_t		strspn(const char * a, const char * b)				{return ::strspn(a,b);}
-inline	size_t		strspn(const wchar_t * a, const wchar_t * b)			{return ::wcsspn(a,b);}
 
 template<class T> T	space_char()							{return static_cast<T>(' ');}
 template<class T> T *	empty_string()							{static	T nullchar; return &nullchar;}

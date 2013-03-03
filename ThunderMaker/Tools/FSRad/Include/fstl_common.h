@@ -58,7 +58,7 @@
 // ---------------------------------------------------------------------------------------------------------------------------------
 
 template <bool B> struct templateAssert {};
-struct templateAssert<true> {static void there_has_been_a_compile_time_assertion() {};};
+template<> struct templateAssert<true> {static void there_has_been_a_compile_time_assertion() {};};
 #define	TemplateAssert(__a) {const bool __b = (__a) ? true:false; templateAssert<__b>::there_has_been_a_compile_time_assertion();}
 #define	TemplateError(__msg) {const bool __b = (__a) ? true:false; templateAssert<__b>::##__msg();}
 

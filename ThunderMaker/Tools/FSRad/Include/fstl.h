@@ -44,14 +44,14 @@
 
 // ---------------------------------------------------------------------------------------------------------------------------------
 
-#include "common"
-#include "string"
-#include "util"
-#include "error"
-#include "array"
-#include "list"
-#include "reservoir"
-#include "hash"
+#include "fstl_common.h"
+#include "fstl_string.h"
+#include "fstl_util.h"
+#include "fstl_error.h"
+#include "fstl_array.h"
+#include "fstl_list.h"
+#include "fstl_reservoir.h"
+#include "fstl_hash.h"
 
 #endif // _FSTL_FSTL
 // ---------------------------------------------------------------------------------------------------------------------------------

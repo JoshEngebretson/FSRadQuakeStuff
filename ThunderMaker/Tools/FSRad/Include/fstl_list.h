@@ -35,7 +35,7 @@
 // Module setup (required includes, macros, etc.)
 // ---------------------------------------------------------------------------------------------------------------------------------
 
-#include "common"
+#include "fstl_common.h"
 
 FSTL_NAMESPACE_BEGIN
 
@@ -47,7 +47,7 @@ class	list
 public:
 	class	node
 	{
-	friend	list<T,G>;
+	friend class list<T,G>;
 	public:
 		// Construction/Destruction
 	
@@ -277,12 +277,12 @@ inline	const	node *		at(unsigned int index) const
 
 inline		void		swap(node* lhs, node* rhs)
 				{
-					if (lhs.next()) lhs->_next->_prev = rhs;
-					if (lhs.prev()) lhs->_prev->_next = rhs;
-					if (rhs.next()) rhs->_next->_prev = lhs;
-					if (rhs.prev()) rhs->_prev->_next = lhs;
-					fstl::swap(lhs._next, rhs._next);
-					fstl::swap(lhs._prev, rhs._prev);
+					if (lhs->next()) lhs->_next->_prev = rhs;
+					if (lhs->prev()) lhs->_prev->_next = rhs;
+					if (rhs->next()) rhs->_next->_prev = lhs;
+					if (rhs->prev()) rhs->_prev->_next = lhs;
+					fstl::swap(lhs->_next, rhs->_next);
+					fstl::swap(lhs->_prev, rhs->_prev);
 				}
 
 				// Sort the list -- This just a bubble sort, so use with discretion

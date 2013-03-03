@@ -37,7 +37,7 @@
 // Module setup (required includes, macros, etc.)
 // ---------------------------------------------------------------------------------------------------------------------------------
 
-#include "common"
+#include "fstl_common.h"
 
 FSTL_NAMESPACE_BEGIN
 
@@ -162,10 +162,10 @@ inline	const	unsigned int	reservred() const {return _reserved;}
 inline	const	unsigned int	granularity() const {return G;}
 
 private:
-	template <unsigned int G>
+	template <unsigned int GG>
 	struct node
 	{
-		T		elements[G];
+		T		elements[GG];
 		unsigned int	usedElements;
 		node *		next;
 	};

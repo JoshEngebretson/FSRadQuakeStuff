@@ -35,8 +35,8 @@
 // Module setup (required includes, macros, etc.)
 // ---------------------------------------------------------------------------------------------------------------------------------
 
-#include "common"
-#include "util"
+#include "fstl_common.h"
+#include "fstl_util.h"
 
 FSTL_NAMESPACE_BEGIN
 
@@ -512,7 +512,7 @@ inline		int		rfind(const T& element, unsigned int start = 0xffffffff) const
 				{
 					if (start >= size()) start = size() - 1;
 
-					for (unsigned int i = start; i >= 0; --i)
+					for (int i = start; i >= 0; --i)
 					{
 						if (_buf[i] == element) return i;
 					}

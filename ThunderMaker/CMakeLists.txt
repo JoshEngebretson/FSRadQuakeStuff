@@ -1,6 +1,8 @@
 
 include (BundleUtilities)
 
+add_subdirectory(Tools)
+
 include_directories(
 	/Users/josh/Dev/wxWidgets-2.9.4/build-cocoa-release/lib/wx/include/osx_cocoa-unicode-static-2.9
 	/Users/josh/Dev/wxWidgets-2.9.4/include

@@ -40,10 +40,10 @@
 #include <cstring>
 #include <cstdio>
 #include <cstdlib>
-#include "common"
-#include "util"
-#include "array"
-#include "list"
+#include "fstl_common.h"
+#include "fstl_util.h"
+#include "fstl_array.h"
+#include "fstl_list.h"
 
 FSTL_NAMESPACE_BEGIN
 
@@ -78,19 +78,6 @@ inline				basic_string(const char * str)
 					}
 				}
 
-inline				basic_string(const wchar_t * str)
-				: _length(0), _buffer(static_cast<T *>(0))
-				{
-					int	len = WideCharToMultiByte(CP_ACP, 0, str, -1, 0, 0, NULL, NULL);
-					resize(len);
-
-					if (_buffer)
-					{
-						_buffer[length()] = 0;
-						WideCharToMultiByte(CP_ACP, 0, str, -1, _buffer, length(), NULL, NULL);
-					}
-				}
-
 inline	explicit		basic_string(const T value)
 				: _length(0), _buffer(static_cast<T *>(0))
 				{
@@ -118,7 +105,7 @@ inline	explicit		basic_string(const long value)
 				: _length(0), _buffer(static_cast<T *>(0))
 				{
 					char	s[50];
-					sprintf(s, "%d", value);
+					sprintf(s, "%d", (int)value);
 					*this = basic_string(s);
 				}
 
@@ -126,7 +113,7 @@ inline	explicit		basic_string(const unsigned long value)
 				: _length(0), _buffer(static_cast<T *>(0))
 				{
 					char	s[50];
-					sprintf(s, "%u", value);
+					sprintf(s, "%u", (unsigned int) value);
 					*this = basic_string(s);
 				}
 
@@ -213,7 +200,7 @@ inline		basic_string	operator - ()
 					return *this;
 				}
 
-inline				operator *=(const int value)
+inline		basic_string operator *=(const int value)
 				{
 					*this = *this * value;
 				}
@@ -748,60 +735,17 @@ typedef	basic_string<char>	string;
 typedef	array<string>		StringArray;
 typedef	list<string>		StringList;
 
-typedef	basic_string<wchar_t>	wstring;
-typedef	array<wstring>		WStringArray;
-typedef	list<wstring>		WStringList;
-
 // ---------------------------------------------------------------------------------------------------------------------------------
 // Mixed-mode global overrides
 // ---------------------------------------------------------------------------------------------------------------------------------
 
 inline	string	operator +(const char * lhs, const string & rhs) {return fstl::string(lhs) + rhs;}
-inline	wstring	operator +(const wchar_t * lhs, const wstring & rhs) {return fstl::wstring(lhs) + rhs;}
 
 // ---------------------------------------------------------------------------------------------------------------------------------
 // Specializations for wide char conversion
 // ---------------------------------------------------------------------------------------------------------------------------------
 
-inline	basic_string<wchar_t>::basic_string(const wchar_t * str)
-	: _length(0), _buffer(static_cast<T *>(0))
-{
-	resize(static_cast<const unsigned int>(wcslen(str)));
 
-	if (_buffer)
-	{
-		_buffer[length()] = 0;
-		wcscpy(_buffer, str);
-	}
-}
-
-#ifdef	_UNICODE
-inline	basic_string<wchar_t>::basic_string(const char * str)
-	: _length(0), _buffer(static_cast<T *>(0))
-{
-	int	len = MultiByteToWideChar(CP_ACP, 0, str, -1, 0, 0);
-	if (len) --len;
-	resize(len);
-
-	if (_buffer)
-	{
-		_buffer[length()] = 0;
-		MultiByteToWideChar(CP_ACP, 0, str, -1, _buffer, length());
-	}
-}
-
-inline	basic_string<char>::basic_string(const wchar_t * str)
-	: _length(0), _buffer(static_cast<T *>(0))
-{
-	resize(static_cast<const unsigned int>(wcslen(str)));
-
-	if (_buffer)
-	{
-		_buffer[length()] = 0;
-		WideCharToMultiByte(CP_ACP, 0, str, -1, _buffer, length(), NULL, NULL);
-	}
-}
-#endif // _UNICODE
 
 FSTL_NAMESPACE_END
 #endif // _FSTL_STRING
