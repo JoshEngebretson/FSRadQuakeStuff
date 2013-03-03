@@ -50,7 +50,7 @@ public:
 				_bspGaussianResolution(8), _leaveResults(false), _writeRawLightmaps(false), _writeOctFile(false),
 				_gamma(0), _ambient(0,0,0), _clamping(ClampNone), _convergence(1), _maxIterationsCount(0),
 				_maxIterations(false), _ambientTerm(true), _useNusselt(false), _directLightOnly(false),
-				_areaLightMultiplier(1000000), _pointLightMultiplier(0.6f), _subdivisionU(4), _subdivisionV(4), _progress(NULL) {}
+				_areaLightMultiplier(1000000), _pointLightMultiplier(0.6f), _subdivisionU(4), _subdivisionV(4){}
 
 		enum		ClampType {ClampNone, ClampSaturate, ClampRetain};
 
@@ -66,7 +66,7 @@ virtual		RadPatch *	findBrightestEmitter();
 virtual		bool		processEnergy(SOctree & node);
 virtual		geom::Color3	calcTotalEnergy();
 virtual		geom::Color3	calcRemainingEnergy();
-virtual		bool		updateStats(ProgressDlg & prog, const bool checkConvergence = true);
+virtual		bool		updateStats(const bool checkConvergence = true);
 virtual		void		distributeInitialEnergy();
 virtual		void		countPatchesAndElements();
 virtual		geom::Color3	calcAmbientTerm();
@@ -74,7 +74,7 @@ virtual		void		expandEdges();
 virtual		void		addAmbient();
 virtual		void		doGammaCorrection();
 virtual		void		doClamping();
-virtual		void		go(CDialog * owner = NULL);
+virtual		void		go();
 virtual		void		readDefaultParms();
 
 	// Accessors
@@ -131,8 +131,7 @@ inline		unsigned int &	subdivisionU()				{return _subdivisionU;}
 inline	const	unsigned int	subdivisionU() const			{return _subdivisionU;}
 inline		unsigned int &	subdivisionV()				{return _subdivisionV;}
 inline	const	unsigned int	subdivisionV() const			{return _subdivisionV;}
-inline		ProgressDlg *&	progress()				{return _progress;}
-inline	const	ProgressDlg *	progress() const			{return _progress;}
+
 inline		geom::Color3 &	initialEnergy()				{return _initialEnergy;}
 inline	const	geom::Color3 &	initialEnergy() const			{return _initialEnergy;}
 inline		geom::Color3 &	totalAbsorbedEnergy()			{return _totalAbsorbedEnergy;}
@@ -199,7 +198,7 @@ private:
 		float		_pointLightMultiplier;
 		unsigned int	_subdivisionU;
 		unsigned int	_subdivisionV;
-		ProgressDlg *	_progress;
+		//ProgressDlg *	_progress;
 		geom::Color3	_initialEnergy;
 		geom::Color3	_totalAbsorbedEnergy;
 		geom::Color3	_totalEscapedEnergy;

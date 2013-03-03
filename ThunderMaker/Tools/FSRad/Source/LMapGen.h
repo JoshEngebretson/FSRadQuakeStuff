@@ -38,7 +38,7 @@
 // ---------------------------------------------------------------------------------------------------------------------------------
 
 #include "RadPrim.h"
-#include "ProgressDlg.h"
+//#include "ProgressDlg.h"
 
 // ---------------------------------------------------------------------------------------------------------------------------------
 
@@ -366,10 +366,10 @@ virtual				~LMapGen();
 
 	// Implementation
 
-virtual		bool		generate(ProgressDlg & progress, RadPrimList & polygons, RadLMapArray & lightmaps);
-virtual		bool		buildCombinedPolygons(ProgressDlg & progress, const RadPrimList & polygons, CombinedPolyList & cpl) const;
-virtual		bool		clipCombinedPolygons(ProgressDlg & progress, CombinedPolyList & cpl, RadPrimList & polygons, const unsigned int limitU, const unsigned int limitV) const;
-virtual		bool		populateLightmaps(ProgressDlg & progress, CombinedPolyList & cpl, RadLMapArray & lightmaps, const unsigned int limitU, const unsigned int limitV) const;
+virtual		bool		generate(RadPrimList & polygons, RadLMapArray & lightmaps);
+virtual		bool		buildCombinedPolygons(const RadPrimList & polygons, CombinedPolyList & cpl) const;
+virtual		bool		clipCombinedPolygons(CombinedPolyList & cpl, RadPrimList & polygons, const unsigned int limitU, const unsigned int limitV) const;
+virtual		bool		populateLightmaps(CombinedPolyList & cpl, RadLMapArray & lightmaps, const unsigned int limitU, const unsigned int limitV) const;
 virtual		unsigned int	populateLightmap(CombinedPolyList & cpl, const unsigned int id, Rect rect) const;
 
 	// Accessors

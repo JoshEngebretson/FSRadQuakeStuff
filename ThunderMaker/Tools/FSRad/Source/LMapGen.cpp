@@ -34,7 +34,7 @@
 #include "FSRad.h"
 #include "RadLMap.h"
 #include "LMapGen.h"
-#include "ProgressDlg.h"
+//#include "ProgressDlg.h"
 
 // ---------------------------------------------------------------------------------------------------------------------------------
 
@@ -77,20 +77,20 @@ static	int planeCompare(const void *elem1, const void *elem2)
 
 // ---------------------------------------------------------------------------------------------------------------------------------
 
-bool	LMapGen::generate(ProgressDlg & progress, RadPrimList & polygons, RadLMapArray & lightmaps)
+bool	LMapGen::generate(RadPrimList & polygons, RadLMapArray & lightmaps)
 {
 	// Combine primitives into completely connected entities, even if concave
 
 	CombinedPolyList	cpl;
-	if (!buildCombinedPolygons(progress, polygons, cpl)) return false;
+	if (!buildCombinedPolygons(polygons, cpl)) return false;
 
 	// Clip any Combined polygons that extend beyond the lightmap dimensions
 
-	if (!clipCombinedPolygons(progress, cpl, polygons, lightmapWidth(), lightmapHeight())) return false;
+	if (!clipCombinedPolygons(cpl, polygons, lightmapWidth(), lightmapHeight())) return false;
 
 	// Start adding Combined polygons to the lightmaps, until none are left
 
-	if (!populateLightmaps(progress, cpl, lightmaps, lightmapWidth(), lightmapHeight())) return false;
+	if (!populateLightmaps(cpl, lightmaps, lightmapWidth(), lightmapHeight())) return false;
 
 	// Debug code -- generate lightmaps so we can see where stuff is
 	#if 0
@@ -146,10 +146,10 @@ bool	LMapGen::generate(ProgressDlg & progress, RadPrimList & polygons, RadLMapAr
 
 // ---------------------------------------------------------------------------------------------------------------------------------
 
-bool	LMapGen::buildCombinedPolygons(ProgressDlg & progress, const RadPrimList & polygons, CombinedPolyList & cpl) const
+bool	LMapGen::buildCombinedPolygons(const RadPrimList & polygons, CombinedPolyList & cpl) const
 {
-	progress.setCurrentStatus("Preparing to generate lightmaps");
-	progress.setCurrentPercent(0);
+	//progress.setCurrentStatus("Preparing to generate lightmaps");
+	//progress.setCurrentPercent(0);
 
 	// Start fresh
 
@@ -173,7 +173,7 @@ bool	LMapGen::buildCombinedPolygons(ProgressDlg & progress, const RadPrimList & 
 
 	qsort(static_cast<void *>(&ptrArray[0]), ptrArray.size(), sizeof(RadPrimPointer), planeCompare);
 
-	progress.setCurrentPercent(20);
+	//progress.setCurrentPercent(20);
 
 	// Build a primary list of Combined polygons... these are all polygons that share the same plane, but are not necessarily
 	// connected
@@ -198,7 +198,7 @@ bool	LMapGen::buildCombinedPolygons(ProgressDlg & progress, const RadPrimList & 
 		}
 	}
 
-	progress.setCurrentPercent(40);
+	//progress.setCurrentPercent(40);
 
 	// The list of Combined polygons contains pieces with the same D, but not necessarily the same normal. We'll also separate
 	// polygons that don't have the same material properties (like illumination color)...
@@ -247,7 +247,7 @@ bool	LMapGen::buildCombinedPolygons(ProgressDlg & progress, const RadPrimList & 
 		}
 	}
 
-	progress.setCurrentPercent(60);
+	//progress.setCurrentPercent(60);
 
 	// Our list still isn't done yet... We need to go through and separate Combined polygons by those polygons that contain
 	// connected points (yes, points, not edges -- fortunately, this is easier :)
@@ -319,7 +319,7 @@ bool	LMapGen::buildCombinedPolygons(ProgressDlg & progress, const RadPrimList & 
 		}
 	}
 
-	progress.setCurrentPercent(80);
+	//progress.setCurrentPercent(80);
 
 	// Generate mapping coordinates...
 	{
@@ -330,7 +330,7 @@ bool	LMapGen::buildCombinedPolygons(ProgressDlg & progress, const RadPrimList & 
 		}
 	}
 
-	progress.setCurrentPercent(100);
+	//progress.setCurrentPercent(100);
 
 	// Done
 
@@ -339,20 +339,20 @@ bool	LMapGen::buildCombinedPolygons(ProgressDlg & progress, const RadPrimList & 
 
 // ---------------------------------------------------------------------------------------------------------------------------------
 
-bool	LMapGen::clipCombinedPolygons(ProgressDlg & progress, CombinedPolyList & cpl, RadPrimList & polygons, const unsigned int limitU, const unsigned int limitV) const
+bool	LMapGen::clipCombinedPolygons(CombinedPolyList & cpl, RadPrimList & polygons, const unsigned int limitU, const unsigned int limitV) const
 {
 	// Scan the list of Combined polygons, looking for those that need to be clipped. Note that if we do clip, we'll be
 	// adding them to the end of the list that we're currently scanning. But that's okay, because that works fine. :)
 
-	progress.setCurrentStatus("Clipping polygons to lightmaps");
+	//progress.setCurrentStatus("Clipping polygons to lightmaps");
 
 	unsigned int	idx = 0;
 	for (CombinedPolyList::node * i = cpl.head(); i; i = i->next(), ++idx)
 	{
 		if (!(idx & 0xf))
 		{
-			progress.setCurrentPercent(static_cast<float>(idx) / static_cast<float>(cpl.size()) * 100.0f);
-			if (progress.stopRequested()) throw "";
+			//progress.setCurrentPercent(static_cast<float>(idx) / static_cast<float>(cpl.size()) * 100.0f);
+			//if (progress.stopRequested()) throw "";
 		}
 
 		CombinedPoly &	cp = i->data();
@@ -522,17 +522,17 @@ bool	LMapGen::clipCombinedPolygons(ProgressDlg & progress, CombinedPolyList & cp
 
 // ---------------------------------------------------------------------------------------------------------------------------------
 
-bool	LMapGen::populateLightmaps(ProgressDlg & progress, CombinedPolyList & cpl, RadLMapArray & lightmaps, const unsigned int limitU, const unsigned int limitV) const
+bool	LMapGen::populateLightmaps(CombinedPolyList & cpl, RadLMapArray & lightmaps, const unsigned int limitU, const unsigned int limitV) const
 {
-	progress.setCurrentStatus("Populating lightmaps");
+	//progress.setCurrentStatus("Populating lightmaps");
 
 	unsigned int	total = 0;
 	unsigned int	lightmapCount = 0;
 
 	for(;;)
 	{
-		progress.setCurrentPercent(static_cast<float>(total) / static_cast<float>(cpl.size()) * 100.0f);
-		if (progress.stopRequested()) throw "";
+		//progress.setCurrentPercent(static_cast<float>(total) / static_cast<float>(cpl.size()) * 100.0f);
+		//if (progress.stopRequested()) throw "";
 
 		unsigned int	count = populateLightmap(cpl, lightmapCount, Rect(0, 0, limitU, limitV));
 		if (!count) break;

@@ -1,4 +1,5 @@
 
+set(CMAKE_OSX_ARCHITECTURES "i386")
 
 include_directories(
 	Include
@@ -9,15 +10,24 @@ set (FSRAD_SRC
     Source/3dutils.cpp
     Source/primitive.cpp
     Source/BeamTree.cpp
-    Source/PolarQuadtree.cpp
     Source/RadPrim.cpp
+    Source/PolarQuadtree.cpp    
     Source/BSP.cpp
     Source/GeomDB.cpp
     Source/ASEfile.cpp
     Source/Ent.cpp
     Source/RadLMap.cpp
     Source/SOctree.cpp
+    Source/LMapGen.cpp
+    Source/RadGen.cpp
 
 )
 
 add_executable(fsrad ${FSRAD_SRC})
+
+get_target_property(FSRADBIN fsrad LOCATION)
+ 
+add_custom_command(TARGET fsrad
+    POST_BUILD
+    COMMAND cp ${FSRADBIN} ${CMAKE_SOURCE_DIR}/Artifacts/fsrad
+)

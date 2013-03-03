@@ -32,7 +32,7 @@
 
 #include "stdafx.h"
 #include "FSRad.h"
-#include "ProgressDlg.h"
+//#include "ProgressDlg.h"
 #include "GeomDB.h"
 #include "BSP.h"
 #include "SOctree.h"
@@ -613,7 +613,7 @@ bool	RadGen::processEnergy(SOctree & node)
 
 		if (lightsToProcess())
 		{
-			progress()->setCurrentStatus("Distributing energy from light sources");
+			//progress()->setCurrentStatus("Distributing energy from light sources");
 
 			energyThisPass() *= pointLightMultiplier() / areaLightMultiplier();
 		}
@@ -627,7 +627,7 @@ bool	RadGen::processEnergy(SOctree & node)
 				initialEnergy() = calcTotalEnergy();
 			}
 
-			progress()->setCurrentStatus("Distributing reflected energy");
+			//progress()->setCurrentStatus("Distributing reflected energy");
 		}
 
 		// Can we merge patches?
@@ -684,7 +684,7 @@ bool	RadGen::processEnergy(SOctree & node)
 
 		// Update the user
 
-		if (!updateStats(*progress())) return false;
+		//if (!updateStats(*progress())) return false;
 
 		// Find potential receivers
 
@@ -755,8 +755,9 @@ geom::Color3	RadGen::calcRemainingEnergy()
 
 // ---------------------------------------------------------------------------------------------------------------------------------
 
-bool	RadGen::updateStats(ProgressDlg & prog, const bool checkConvergence)
+bool	RadGen::updateStats(const bool checkConvergence)
 {
+	/*
 	const	float	displayMultiplier = static_cast<float>(areaLightMultiplier());
 
 	geom::Color3	ie = initialEnergy();
@@ -859,21 +860,23 @@ bool	RadGen::updateStats(ProgressDlg & prog, const bool checkConvergence)
 	// Or tell them to stop when the user requests it...
 
 	return !prog.stopRequested();
+	*/
+	return true;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------
 
 void	RadGen::distributeInitialEnergy()
 {
-	progress()->setCurrentStatus("Slicing up geometry into patches/elements");
+	//progress()->setCurrentStatus("Slicing up geometry into patches/elements");
 
 	unsigned int	idx = 0;
 	for (RadPrimList::node *i = geometry().polys().head(); i; i = i->next(), ++idx)
 	{
 		if (!(idx&0xf))
 		{
-			progress()->setCurrentPercent(static_cast<float>(idx) / static_cast<float>(geometry().polys().size()) * 100.0f);
-			if (progress()->stopRequested()) throw "";
+			//progress()->setCurrentPercent(static_cast<float>(idx) / static_cast<float>(geometry().polys().size()) * 100.0f);
+			//if (progress()->stopRequested()) throw "";
 		}
 
 		RadPrim &	prim = i->data();
@@ -908,7 +911,7 @@ void	RadGen::distributeInitialEnergy()
 
 void	RadGen::countPatchesAndElements()
 {
-	progress()->setCurrentStatus("Counting patches and elements");
+	//progress()->setCurrentStatus("Counting patches and elements");
 
 	totalPatches() = 0;
 	totalElements() = 0;
@@ -918,8 +921,8 @@ void	RadGen::countPatchesAndElements()
 	{
 		if (!(idx&0xf))
 		{
-			progress()->setCurrentPercent(static_cast<float>(idx) / static_cast<float>(geometry().polys().size()) * 100.0f);
-			if (progress()->stopRequested()) throw "";
+			//progress()->setCurrentPercent(static_cast<float>(idx) / static_cast<float>(geometry().polys().size()) * 100.0f);
+			//if (progress()->stopRequested()) throw "";
 		}
 
 		RadPrim &	prim = i->data();
@@ -942,7 +945,7 @@ void	RadGen::countPatchesAndElements()
 
 geom::Color3	RadGen::calcAmbientTerm()
 {
-	progress()->setCurrentStatus("Calculating the ambient term");
+	//progress()->setCurrentStatus("Calculating the ambient term");
 
 	// We'll need the total area and total average reflectivity
 
@@ -969,8 +972,8 @@ geom::Color3	RadGen::calcAmbientTerm()
 	{
 		if (!(idx&0xf))
 		{
-			progress()->setCurrentPercent(static_cast<float>(idx) / static_cast<float>(geometry().polys().size()) * 100.0f);
-			if (progress()->stopRequested()) throw "";
+			//progress()->setCurrentPercent(static_cast<float>(idx) / static_cast<float>(geometry().polys().size()) * 100.0f);
+			//if (progress()->stopRequested()) throw "";
 		}
 
 		RadPrim &	p = i->data();
@@ -1011,7 +1014,7 @@ geom::Color3	RadGen::calcAmbientTerm()
 
 void	RadGen::expandEdges()
 {
-	progress()->setCurrentStatus("Correcting edges in the lightmaps");
+	//progress()->setCurrentStatus("Correcting edges in the lightmaps");
 
 	// Duplicate the lightmaps for mask purposes
 // PDNDEBUG -- maskMaps is a bad name.. and using lightmaps is wasteful... could be just an array of float arrays...
@@ -1043,8 +1046,8 @@ float	totalArea = 0;
 		{
 			if (!(idx&0xf))
 			{
-				progress()->setCurrentPercent(static_cast<float>(idx) / static_cast<float>(geometry().polys().size()) * 50.0f);
-				if (progress()->stopRequested()) throw "";
+				//progress()->setCurrentPercent(static_cast<float>(idx) / static_cast<float>(geometry().polys().size()) * 50.0f);
+				//if (progress()->stopRequested()) throw "";
 			}
 
 			RadPrim &	p = i->data();
@@ -1109,8 +1112,8 @@ totalArea = (p.uXFormVector() % p.vXFormVector()).length();
 		{
 			if (!(i&0xf))
 			{
-				progress()->setCurrentPercent(static_cast<float>(i) / static_cast<float>(geometry().polys().size()) * 50.0f + 50.0f);
-				if (progress()->stopRequested()) throw "";
+				//progress()->setCurrentPercent(static_cast<float>(i) / static_cast<float>(geometry().polys().size()) * 50.0f + 50.0f);
+				//if (progress()->stopRequested()) throw "";
 			}
 
 			// Lightmap & mask
@@ -1205,14 +1208,14 @@ void	RadGen::addAmbient()
 {
 	if (ambient() == geom::Color3(0,0,0)) return;
 
-	progress()->setCurrentStatus("Adding post-processing ambient light");
+	//progress()->setCurrentStatus("Adding post-processing ambient light");
 
 	for (unsigned int i = 0; i < geometry().lightmaps().size(); ++i)
 	{
 		if (!(i&0xf))
 		{
-			progress()->setCurrentPercent(static_cast<float>(i) / static_cast<float>(geometry().lightmaps().size()) * 100.0f);
-			if (progress()->stopRequested()) throw "";
+			//progress()->setCurrentPercent(static_cast<float>(i) / static_cast<float>(geometry().lightmaps().size()) * 100.0f);
+			//if (progress()->stopRequested()) throw "";
 		}
 
 		geometry().lightmaps()[i].addAmbient(ambient());
@@ -1225,14 +1228,14 @@ void	RadGen::doGammaCorrection()
 {
 	if (gamma() == 1.0f) return;
 
-	progress()->setCurrentStatus("Gamma correction");
+	//progress()->setCurrentStatus("Gamma correction");
 
 	for (unsigned int i = 0; i < geometry().lightmaps().size(); ++i)
 	{
 		if (!(i&0xf))
 		{
-			progress()->setCurrentPercent(static_cast<float>(i) / static_cast<float>(geometry().lightmaps().size()) * 100.0f);
-			if (progress()->stopRequested()) throw "";
+			//progress()->setCurrentPercent(static_cast<float>(i) / static_cast<float>(geometry().lightmaps().size()) * 100.0f);
+			//if (progress()->stopRequested()) throw "";
 		}
 
 		geometry().lightmaps()[i].applyGamma(gamma());
@@ -1245,14 +1248,14 @@ void	RadGen::doClamping()
 {
 	if (clamping() == ClampSaturate)
 	{
-		progress()->setCurrentStatus("Clamping with saturation");
+		//progress()->setCurrentStatus("Clamping with saturation");
 
 		for (unsigned int i = 0; i < geometry().lightmaps().size(); ++i)
 		{
 			if (!(i&0xf))
 			{
-				progress()->setCurrentPercent(static_cast<float>(i) / static_cast<float>(geometry().lightmaps().size()) * 100.0f);
-				if (progress()->stopRequested()) throw "";
+				//progress()->setCurrentPercent(static_cast<float>(i) / static_cast<float>(geometry().lightmaps().size()) * 100.0f);
+				//if (progress()->stopRequested()) throw "";
 			}
 
 			geometry().lightmaps()[i].clampSaturate();
@@ -1260,14 +1263,14 @@ void	RadGen::doClamping()
 	}
 	else if (clamping() == ClampRetain)
 	{
-		progress()->setCurrentStatus("Clamping with color ratio");
+		//progress()->setCurrentStatus("Clamping with color ratio");
 
 		for (unsigned int i = 0; i < geometry().lightmaps().size(); ++i)
 		{
 			if (!(i&0xf))
 			{
-				progress()->setCurrentPercent(static_cast<float>(i) / static_cast<float>(geometry().lightmaps().size()) * 100.0f);
-				if (progress()->stopRequested()) throw "";
+				//progress()->setCurrentPercent(static_cast<float>(i) / static_cast<float>(geometry().lightmaps().size()) * 100.0f);
+				//if (progress()->stopRequested()) throw "";
 			}
 
 			geometry().lightmaps()[i].clampRetainColorRatio();
@@ -1277,7 +1280,7 @@ void	RadGen::doClamping()
 
 // ---------------------------------------------------------------------------------------------------------------------------------
 
-void	RadGen::go(CDialog * owner)
+void	RadGen::go()
 {
 	try
 	{
@@ -1288,8 +1291,8 @@ void	RadGen::go(CDialog * owner)
 
 		// Put up the progress dialog...
 
-		delete progress();
-		progress() = new ProgressDlg(owner);
+		//delete progress();
+		//progress() = new ProgressDlg(owner);
 
 		// Load up the geometry
 		{
@@ -1303,38 +1306,38 @@ void	RadGen::go(CDialog * owner)
 
 			if (ext == "oct")
 			{
-				if (!geometry().readOCT(inputFilename(), *progress(), defaultReflectivity()))
+				if (!geometry().readOCT(inputFilename(), defaultReflectivity()))
 				{
 					// Error if they didn't ask to stop
 
-					if (!progress()->stopRequested())
-					{
-						throw "Unable to load the geometry";
-					}
+					//if (!progress()->stopRequested())
+					//{
+					//	throw "Unable to load the geometry";
+					//}
 				}
 			}
 			else if (ext == "ent")
 			{
-				if (!geometry().readENT(inputFilename(), *progress(), defaultReflectivity()))
+				if (!geometry().readENT(inputFilename(), defaultReflectivity()))
 				{
 					// Error if they didn't ask to stop
 
-					if (!progress()->stopRequested())
-					{
-						throw "Unable to load the geometry";
-					}
+					//if (!progress()->stopRequested())
+					//{
+					//	throw "Unable to load the geometry";
+					//}
 				}
 			}
 			else if (ext == "ase")
 			{
-				if (!geometry().readASE(inputFilename(), *progress(), defaultReflectivity()))
+				if (!geometry().readASE(inputFilename(), defaultReflectivity()))
 				{
 					// Error if they didn't ask to stop
 
-					if (!progress()->stopRequested())
-					{
-						throw "Unable to load the geometry";
-					}
+					//if (!progress()->stopRequested())
+					//{
+					//	throw "Unable to load the geometry";
+					//}
 				}
 			}
 		}
@@ -1347,7 +1350,7 @@ void	RadGen::go(CDialog * owner)
 			lmg.uTexelsPerUnit() = uTexelsPerUnit();
 			lmg.vTexelsPerUnit() = vTexelsPerUnit();
 
-			if (!lmg.generate(*progress(), geometry().polys(), geometry().lightmaps()))
+			if (!lmg.generate(geometry().polys(), geometry().lightmaps()))
 			{
 				throw "Unable to generate lightmap coordinates & lightmaps";
 			}
@@ -1371,7 +1374,7 @@ void	RadGen::go(CDialog * owner)
 			bi.maxDepthLimiter = octreeMaxDepth();
 			bi.bspQuantizeResolution = bspGaussianResolution();
 			bi.bspLeastDepthErrorBoundsPercent = bspMinSplitRange();
-			bi.progressDialog = progress();
+			//bi.progressDialog = progress();
 			bi.patchSubdivisionU = subdivisionU();
 			bi.patchSubdivisionV = subdivisionV();
 
@@ -1379,11 +1382,12 @@ void	RadGen::go(CDialog * owner)
 			{
 				// Error if they didn't ask to stop
 
-				if (!progress()->stopRequested()) throw "Unable to build the Octree";
+				//if (!progress()->stopRequested()) throw "Unable to build the Octree";
 
 				// If they _did_ ask to stop, bail without an error
 
-				else throw "";
+				//else throw "";
+				assert(0);
 			}
 		}
 
@@ -1394,7 +1398,7 @@ void	RadGen::go(CDialog * owner)
 		iterationsProcessed() = 0;
 		initialEnergy() = calcTotalEnergy();
 		energyThisPass() = 0;
-		updateStats(*progress());
+		//updateStats(*progress());
 		lightsToProcess() = geometry().lights().size() != 0;
 
 		// Run the ratiosity process
@@ -1403,6 +1407,7 @@ void	RadGen::go(CDialog * owner)
 
 		// Check for a request to bail...
 
+		/*
 		if (progress()->stopRequested())
 		{
 			if (AfxMessageBox("You have stopped the radiosity process.\n\nSave the data you have generted so far?", MB_YESNO) == IDYES)
@@ -1414,6 +1419,7 @@ void	RadGen::go(CDialog * owner)
 				throw "";
 			}
 		}
+		*/
 
 		// Ambient term estimation for unshot light
 
@@ -1440,22 +1446,22 @@ void	RadGen::go(CDialog * owner)
 
 		if (writeOctFile())
 		{
-			progress()->setCurrentStatus("Writing Oct file");
-			geometry().writeOCT(writeOctFilename(), *progress());
+			//progress()->setCurrentStatus("Writing Oct file");
+			geometry().writeOCT(writeOctFilename());
 		}
 
 		// Write the raw data?
 
 		if (writeRawLightmaps())
 		{
-			progress()->setCurrentStatus("Writing lightmaps");
+			//progress()->setCurrentStatus("Writing lightmaps");
 
 			for (unsigned int i = 0; i < geometry().lightmaps().size(); ++i)
 			{
 				if (!(i&0xf))
 				{
-					progress()->setCurrentPercent(static_cast<float>(i) / static_cast<float>(geometry().lightmaps().size()) * 100.0f);
-					if (progress()->stopRequested()) throw "";
+					//progress()->setCurrentPercent(static_cast<float>(i) / static_cast<float>(geometry().lightmaps().size()) * 100.0f);
+					//if (progress()->stopRequested()) throw "";
 				}
 
 				// Write the lightmap
@@ -1466,7 +1472,7 @@ void	RadGen::go(CDialog * owner)
 
 		// Sound a finished alarm
 
-		MessageBeep(MB_OK);
+		//MessageBeep(MB_OK);
 
 		// Deal with results
 		{
@@ -1474,26 +1480,29 @@ void	RadGen::go(CDialog * owner)
 			{
 				// Cleanup the progress dialog
 
-				progress()->setCurrentStatus("");
-				progress()->setCurrentPercent(0);
+				//progress()->setCurrentStatus("");
+				//progress()->setCurrentPercent(0);
 
-				progress()->supressAreYouSure() = true;
+				//progress()->supressAreYouSure() = true;
 
-				for(;;)
-				{
-					progress()->allowBackgroundProcessing();
-					if (progress()->stopRequested()) break;
-				}
+				//for(;;)
+				//{
+				//	progress()->allowBackgroundProcessing();
+				//	if (progress()->stopRequested()) break;
+				//}
 			}
 		}
 	}
 	catch(const char *err)
 	{
-		if (err && *err) AfxMessageBox(err);
+		if (err && *err) {
+			//AfxMessageBox(err);
+			assert(0);
+		}
 	}
 
-	delete progress();
-	progress() = NULL;
+	//delete progress();
+	//progress() = NULL;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------
@@ -1502,78 +1511,94 @@ void	RadGen::readDefaultParms()
 {
 	// Desktop
 
-	char	desktopPath[MAX_PATH];
+	char	desktopPath[4096];
 	memset(desktopPath, 0, sizeof(desktopPath));
-	SHGetSpecialFolderPath(NULL, desktopPath, CSIDL_DESKTOPDIRECTORY, 0);
-	fstl::string	defaultOctOutput = fstl::string(desktopPath) + "\\output.oct";
+	//SHGetSpecialFolderPath(NULL, desktopPath, CSIDL_DESKTOPDIRECTORY, 0);
+	sprintf(desktopPath, "/Users/josh/Desktop");
+	fstl::string	defaultOctOutput = fstl::string(desktopPath) + "/output.oct";
 
 	// Lightmap parms
 
-	lightmapWidth() = theApp.GetProfileInt("Options", "lightmapWidth", 128);
-	lightmapHeight() = theApp.GetProfileInt("Options", "lightmapHeight", 128);
-	uTexelsPerUnit() = 1 / static_cast<float>(atof(theApp.GetProfileString("Options", "uTexelsPerUnitInverse", "16")));
-	vTexelsPerUnit() = 1 / static_cast<float>(atof(theApp.GetProfileString("Options", "vTexelsPerUnitInverse", "16")));
+	lightmapWidth() = 128;//theApp.GetProfileInt("Options", "lightmapWidth", 128);
+	lightmapHeight() = 128;//theApp.GetProfileInt("Options", "lightmapHeight", 128);
+	uTexelsPerUnit() = 1.0f / 16.0f;//static_cast<float>(atof(theApp.GetProfileString("Options", "uTexelsPerUnitInverse", "16")));
+	vTexelsPerUnit() = 1.0f / 16.0f;//static_cast<float>(atof(theApp.GetProfileString("Options", "vTexelsPerUnitInverse", "16")));
 
 	// Octree parameters
 
-	octreeThreshold() = theApp.GetProfileInt("Options", "OctreePolysPerNode", 50000);
-	octreeMaxDepth() = theApp.GetProfileInt("Options", "OctreeMaxDepth", 50);
-	octreeMinRadius() = static_cast<float>(atof(theApp.GetProfileString("Options", "OctreeMinRadius", "5.0")));
+	octreeThreshold() = 50000;//theApp.GetProfileInt("Options", "OctreePolysPerNode", 50000);
+	octreeMaxDepth() = 50;//theApp.GetProfileInt("Options", "OctreeMaxDepth", 50);
+	octreeMinRadius() = 5.0f;//static_cast<float>(atof(theApp.GetProfileString("Options", "OctreeMinRadius", "5.0")));
 
 	// Reflectivity
 
-	float	rr = static_cast<float>(atof(theApp.GetProfileString("Options", "rReflectivity", "0.78")));
-	float	rg = static_cast<float>(atof(theApp.GetProfileString("Options", "rReflectivity", "0.78")));
-	float	rb = static_cast<float>(atof(theApp.GetProfileString("Options", "rReflectivity", "0.78")));
+	float	rr = 0.78f;//static_cast<float>(atof(theApp.GetProfileString("Options", "rReflectivity", "0.78")));
+	float	rg = 0.78f;//static_cast<float>(atof(theApp.GetProfileString("Options", "rReflectivity", "0.78")));
+	float	rb = 0.78f;//static_cast<float>(atof(theApp.GetProfileString("Options", "rReflectivity", "0.78")));
 	defaultReflectivity() = geom::Color3(rr, rg, rb);
 
 	// BSP parameters
 
-	bspMinSplitRange() = static_cast<float>(atof(theApp.GetProfileString("Options", "BSPMinSplitRange", "5.0")));
-	bspGaussianResolution() = theApp.GetProfileInt("Options", "BSPGaussianResolution", 8);
+	bspMinSplitRange() = 5.0f;//static_cast<float>(atof(theApp.GetProfileString("Options", "BSPMinSplitRange", "5.0")));
+	bspGaussianResolution() = 8;//theApp.GetProfileInt("Options", "BSPGaussianResolution", 8);
 
 	// Input/output parameters
 
-	writeRawLightmapsFolder() = fstl::string(theApp.GetProfileString("Options", "outputRawDirectory", desktopPath));
-	writeRawLightmaps() = theApp.GetProfileInt("Options", "outputRawDirectoryFlag", 0) ? true:false;
-	writeOctFile() = theApp.GetProfileInt("Options", "outputOctFileFlag", 1) ? true:false;
-	writeOctFilename() = fstl::string(theApp.GetProfileString("Options", "outputOctFilename", defaultOctOutput.asArray()));
-	inputFilename() = fstl::string(theApp.GetProfileString("Options", "inputFilename", ""));
+	writeRawLightmapsFolder() = "";//fstl::string(theApp.GetProfileString("Options", "outputRawDirectory", desktopPath));
+	writeRawLightmaps() = true;//theApp.GetProfileInt("Options", "outputRawDirectoryFlag", 0) ? true:false;
+	writeOctFile() = true;//theApp.GetProfileInt("Options", "outputOctFileFlag", 1) ? true:false;
+	writeOctFilename() = "output.oct"; //fstl::string(theApp.GetProfileString("Options", "outputOctFilename", defaultOctOutput.asArray()));
+	inputFilename() = "cornellbox.ent";//fstl::string(theApp.GetProfileString("Options", "inputFilename", ""));
 
 	// General parms
 
-	convergence() = theApp.GetProfileInt("Options", "convergence", 10);
-	maxIterations() = theApp.GetProfileInt("Options", "enableMaxIterations", 0) ? true:false;
-	maxIterationsCount() = theApp.GetProfileInt("Options", "maxIterationsCount", 1000);
-	areaLightMultiplier() = theApp.GetProfileInt("Options", "areaLightMultiplier", 1000000);
-	pointLightMultiplier() = static_cast<float>(atof(theApp.GetProfileString("Options", "pointLightMultiplier", "0.6")));
-	subdivisionU() = theApp.GetProfileInt("Options", "subdivisionU", 4);
-	subdivisionV() = theApp.GetProfileInt("Options", "subdivisionV", 4);
-	ambientTerm() = theApp.GetProfileInt("Options", "ambientTerm", 1) ? true:false;
-	useNusselt() = theApp.GetProfileInt("Options", "useNusselt", 0) ? true:false;
-	directLightOnly() = theApp.GetProfileInt("Options", "directLightOnly", 0) ? true:false;
-	adaptiveMaxSubdivisionU() = theApp.GetProfileInt("Options", "adaptiveMaxSubdivisionU", 256);
-	adaptiveMaxSubdivisionV() = theApp.GetProfileInt("Options", "adaptiveMaxSubdivisionV", 256);
-	adaptivePatchSubdivision() = theApp.GetProfileInt("Options", "adaptivePatchSubdivision", 1) ? true:false;
-	adaptiveThreshold() = theApp.GetProfileInt("Options", "adaptiveThreshold", 15);
+	convergence() = 10;//theApp.GetProfileInt("Options", "convergence", 10);
+	maxIterations() = false;//theApp.GetProfileInt("Options", "enableMaxIterations", 0) ? true:false;
+	maxIterationsCount() = 1000;//theApp.GetProfileInt("Options", "maxIterationsCount", 1000);
+	areaLightMultiplier() = 1000000;//theApp.GetProfileInt("Options", "areaLightMultiplier", 1000000);
+	pointLightMultiplier() = 0.6f;//static_cast<float>(atof(theApp.GetProfileString("Options", "pointLightMultiplier", "0.6")));
+	subdivisionU() = 4;//theApp.GetProfileInt("Options", "subdivisionU", 4);
+	subdivisionV() = 4;//theApp.GetProfileInt("Options", "subdivisionV", 4);
+	ambientTerm() = true;//theApp.GetProfileInt("Options", "ambientTerm", 1) ? true:false;
+	useNusselt() = false;//theApp.GetProfileInt("Options", "useNusselt", 0) ? true:false;
+	directLightOnly() = false;//theApp.GetProfileInt("Options", "directLightOnly", 0) ? true:false;
+	adaptiveMaxSubdivisionU() = 256;//theApp.GetProfileInt("Options", "adaptiveMaxSubdivisionU", 256);
+	adaptiveMaxSubdivisionV() = 256;//theApp.GetProfileInt("Options", "adaptiveMaxSubdivisionV", 256);
+	adaptivePatchSubdivision() = true;//theApp.GetProfileInt("Options", "adaptivePatchSubdivision", 1) ? true:false;
+	adaptiveThreshold() = 15;//theApp.GetProfileInt("Options", "adaptiveThreshold", 15);
 
 	leaveResults() = false;
 
 	// Post-processing parms
 
-	gamma() = static_cast<float>(theApp.GetProfileInt("Options", "gamma", 0)) / 100.0f;
-	ambient().r() = static_cast<float>(theApp.GetProfileInt("Options", "rAmbient", 0));
-	ambient().g() = static_cast<float>(theApp.GetProfileInt("Options", "gAmbient", 0));
-	ambient().b() = static_cast<float>(theApp.GetProfileInt("Options", "bAmbient", 0));
+	gamma() = 0;//static_cast<float>(theApp.GetProfileInt("Options", "gamma", 0)) / 100.0f;
+	ambient().r() = 0;//static_cast<float>(theApp.GetProfileInt("Options", "rAmbient", 0));
+	ambient().g() = 0;//static_cast<float>(theApp.GetProfileInt("Options", "gAmbient", 0));
+	ambient().b() = 0;//static_cast<float>(theApp.GetProfileInt("Options", "bAmbient", 0));
 
+	clamping() = ClampNone;
+
+/*
 	switch(theApp.GetProfileInt("Options", "clamping", RadGen::ClampNone))
 	{
 		case	ClampSaturate:	clamping() = ClampSaturate;	break;
 		case	ClampRetain:	clamping() = ClampRetain;	break;
 		default:		clamping() = ClampNone;		break;
 	}
+*/	
 }
 
+extern "C" {
+	int main (int argc, const char** args)
+	{
+		RadGen		radGen;
+		radGen.readDefaultParms();
+		radGen.go();
+	
+		return 0;
+	}
+}
+ 
 // ---------------------------------------------------------------------------------------------------------------------------------
 // RadGen.cpp - End of file
 // ---------------------------------------------------------------------------------------------------------------------------------
