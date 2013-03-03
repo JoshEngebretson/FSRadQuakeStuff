@@ -55,6 +55,11 @@ set (QVIS_SRC
     vis/vis.c
 )
 
+set (QTHUNDER_SRC
+
+    qthunder/qthunder.c
+)
+
 
 add_library (qcommon STATIC ${QCOMMON_SRC})
 
@@ -82,5 +87,18 @@ get_target_property(QVISBIN qvis LOCATION)
 add_custom_command(TARGET qvis
     POST_BUILD
     COMMAND cp ${QVISBIN} ${CMAKE_SOURCE_DIR}/Artifacts/qvis
+)
+
+add_executable(qthunder ${QTHUNDER_SRC})
+
+target_link_libraries(qthunder  
+    qcommon        
+)
+
+get_target_property(QTHUNDERBIN qthunder LOCATION)
+ 
+add_custom_command(TARGET qthunder
+    POST_BUILD
+    COMMAND cp ${QTHUNDERBIN} ${CMAKE_SOURCE_DIR}/Artifacts/qthunder
 )
 
