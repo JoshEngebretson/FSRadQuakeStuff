@@ -89,11 +89,12 @@ endif()
 # Locate the .app and process the XIB into it.
 get_target_property(THUNDERMAKER_BIN ThunderMaker LOCATION)
 get_dotapp_dir(${THUNDERMAKER_BIN} APPLICATION_APP_LOCATION)
-add_custom_command (TARGET ThunderMaker POST_BUILD 
-                  COMMAND ${IBTOOL} --errors --warnings --notices --output-format human-readable-text 
-                          --compile ${APPLICATION_APP_LOCATION}/Contents/Resources/MainMenu.nib 
-                         ${CMAKE_CURRENT_SOURCE_DIR}/Mac/TrenchBroom/en.lproj/MainMenu.xib
-                  COMMENT "Compiling MainMenu.xib")
+
+#add_custom_command (TARGET ThunderMaker POST_BUILD 
+#                  COMMAND ${IBTOOL} --errors --warnings --notices --output-format human-readable-text 
+#                          --compile ${APPLICATION_APP_LOCATION}/Contents/Resources/MainMenu.nib 
+#                         ${CMAKE_CURRENT_SOURCE_DIR}/Mac/TrenchBroom/en.lproj/MainMenu.xib
+#                  COMMENT "Compiling MainMenu.xib")
 
 # OSX app bundle
 set_target_properties(ThunderMaker PROPERTIES
@@ -115,6 +116,9 @@ add_custom_target(CreateMacArtifact ALL
    COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/Resources/Graphics/*.lmp ${DESTAPPRESOURCES}
    COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/Shader/*.vertsh ${DESTAPPRESOURCES}
    COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/Source/Renderer/Shader/*.fragsh ${DESTAPPRESOURCES}
+   COMMAND ${IBTOOL} --errors --warnings --notices --output-format human-readable-text 
+                     --compile ${DESTAPPRESOURCES}/MainMenu.nib 
+                     ${CMAKE_CURRENT_SOURCE_DIR}/Mac/TrenchBroom/en.lproj/MainMenu.xib  
 )
 		
 add_dependencies(CreateMacArtifact ThunderMaker)
