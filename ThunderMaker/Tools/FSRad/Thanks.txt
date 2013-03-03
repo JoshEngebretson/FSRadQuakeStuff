@@ -1,0 +1,14 @@
+I'm pretty lucky to be able to release this... you owe a bit of grattitude,
+and here's why:
+
+This project was contracted by Jason Zisk of nFusion Interactive, LLC. Jason
+and nFusion were kind enough to allow me to maintain rights to the code, so
+that I could do with it what I wanted to... I chose to release it publicly.
+How many companies do you know that are _that_ cool? :)
+
+You can visit their website here:  http://www.n-Fusion.com/
+
+This radiosity processor was initially used for processing the radiosity in
+the buildings of the game "Deadly Dozen". It will probably be used for future
+nFusion games, and maybe others, thanks to their generosity and willingness
+to share.

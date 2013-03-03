@@ -1,0 +1,32 @@
+Microsoft Visual Studio Solution File, Format Version 7.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FSRad", "FSRad\FSRad.vcproj", "{295B0238-42B9-46BF-B98D-B62BF416D7F9}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "geom", "geom\geom.vcproj", "{E7F3FFCA-443F-4445-8433-3E64864F2C1B}"
+EndProject
+Global
+	GlobalSection(DevPartner Solution Properties) = postSolution
+	EndGlobalSection
+	GlobalSection(SolutionNotes) = postSolution
+	EndGlobalSection
+	GlobalSection(SolutionConfiguration) = preSolution
+		ConfigName.0 = Debug
+		ConfigName.1 = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+		{295B0238-42B9-46BF-B98D-B62BF416D7F9}.0 = {E7F3FFCA-443F-4445-8433-3E64864F2C1B}
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{295B0238-42B9-46BF-B98D-B62BF416D7F9}.Debug.ActiveCfg = Debug|Win32
+		{295B0238-42B9-46BF-B98D-B62BF416D7F9}.Debug.Build.0 = Debug|Win32
+		{295B0238-42B9-46BF-B98D-B62BF416D7F9}.Release.ActiveCfg = Release|Win32
+		{295B0238-42B9-46BF-B98D-B62BF416D7F9}.Release.Build.0 = Release|Win32
+		{E7F3FFCA-443F-4445-8433-3E64864F2C1B}.Debug.ActiveCfg = Debug|Win32
+		{E7F3FFCA-443F-4445-8433-3E64864F2C1B}.Debug.Build.0 = Debug|Win32
+		{E7F3FFCA-443F-4445-8433-3E64864F2C1B}.Release.ActiveCfg = Release|Win32
+		{E7F3FFCA-443F-4445-8433-3E64864F2C1B}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

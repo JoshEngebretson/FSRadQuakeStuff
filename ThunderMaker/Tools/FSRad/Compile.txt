@@ -1,0 +1,11 @@
+------------------------------------------------------------------------------
+Compiling it
+------------------------------------------------------------------------------
+
+Everything you need to compile/run it is here...
+
+To compile the project, go into Source/FSRad and double-click on the DSW file.
+
+The Run folder contains compiled binary files. When you compile the program,
+look for it there.
+

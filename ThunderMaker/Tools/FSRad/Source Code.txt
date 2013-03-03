@@ -1,0 +1,25 @@
+------------------------------------------------------------------------------
+About the code
+------------------------------------------------------------------------------
+
+There are three major pieces of code here:
+
+ FSTL - Fluid Studios Template Library
+ GEOM - 3D math & geometry library
+ FSRAD - Radiosity processor
+
+FSTL is my own miniature version of the STL. For the most part, it's faster
+than the standard STL (with the exception of reference counting) and is more
+compact. There are a number of interface differences, but for the most part,
+they follow the same interface construct. There are no compiled files for
+this, only inline code in the headers. As a side-note, this is a ~really~ cool
+template library. ;)
+
+GEOM is a 3D math and geometry library. This compiles into a library.
+
+FSRad is the actual program. It uses the FSTL (headers) and the GEOM (headers
+and lib) to compile. All project files are there.
+
+If you want a starting point, go into RadGen.cpp and look at the go() routine
+-- this routine is the main controller of the radiosity process.
+

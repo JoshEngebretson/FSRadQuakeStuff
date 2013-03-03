@@ -1,0 +1,41 @@
+------------------------------------------------------------------------------
+Interested in a radiosity course at GameInstitute.com?
+------------------------------------------------------------------------------
+
+I'm most likely going to be starting on a course (or few) at GameInstitute.com
+that covers radiosity. This/these course(s) will discuss standard techniques,
+as well as the new innovations exposed by this project. If you want to know
+more or to be informed when the course becomes available, be sure to drop me
+an email:
+
+  midnight@FluidStudios.com
+
+Please include "GI Course Notification" in the subject, and I'll be sure to
+save your request and notify you when the time comes.
+
+On a more personal note...
+
+Those of you that know me, know that when not confined to an NDA, have always
+shared as much information as I can. So why am I advertising here that you
+should pay for this information by signing up for an online course? Well, hear
+me out, please...
+
+When GameInstitute.com and I first talked about this possibility, I expressed
+that I had every intention of freely distributing the source code and producing
+a few documents that explained the work. I mentioned this because of the
+obvious conflict of interest that it raises. Joe Meeneghan (CEO of GI, and an
+all-around-great-guy) was very open and willing to discuss options.
+
+As it turns out, the conflict is minimal.
+
+The documents I planned on producing would cover very specific topics, as they
+applied to this software. However, the GameInstitute.com courses would include
+many various techniques (including the more common hemicube approach, for
+example.) The course would include these techniques, along with
+implementations of them, and also cover the finer implementation details that
+I don't typically cover in my more general documents. Also, those that signed
+up with the course would find added value in my personal attention.
+
+All in all, the GameInstitute.com course could be summed up as an "advanced
+extension" to the documents I typically produce, with a much finer level of
+information detail.

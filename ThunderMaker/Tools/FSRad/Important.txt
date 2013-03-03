@@ -1,0 +1,70 @@
+------------------------------------------------------------------------------
+Very important stuff
+------------------------------------------------------------------------------
+
+Many releases include disclaimers, saying stuff like "this code is ugly... I
+had to rush, etc." -- I'm not going to do that. For the most part, the code
+is production quality. Any nasty or hacked bits are expected to be replaced
+(like the beamtree.)
+
+You can expect this code to work quite well. It's been rather well tested and
+appears to work fine.
+
+You can also expect that (because of the soon-to-be-replaced) beamtree, it
+will bog down considerably with large scenes (say... 5000 and above polys).
+
+Finally, the octree is pretty much unused in this version. So make sure you
+set the octree threshold to a value larger than your largest database (in
+polygon count) -- or just set it to 10000000 and call it a day. :)
+
+You're getting a pre-release of this project. This project is still being
+actively developed. Check the FluidStudios.com website for a final release
+sometime in the future (yeah, "sometime" -- maybe next month, maybe next
+year. :)
+
+Until then, don't expect any long explanations on how stuff works in this
+rad processor. A lot of it is new (for example, the BSP uses a rather unique
+method of building the tree, which is much faster than common techniques and
+also reduces splits to a minimum.)
+
+If you don't understand something, please (!!) use the code and debugger to
+figure it out before contacting me. If you have questions about this code,
+feel free to email me at midnight@FluidStudios.com. However, if I feel you
+didn't try hard enough to figure it out on your own, I will ignore your mail.
+Sorry, but I'm just being spread way too thin these days.
+
+------------------------------------------------------------------------------
+Descriptions on new techniques
+------------------------------------------------------------------------------
+
+If you want to know how stuff works, first check the code. Then, there are two
+other places to look. First, check the folder named "LMap Packing Algo at
+work" -- in there, you'll find an explanation of exactly how the lightmap
+packer works in its entirety.
+
+Second, if you want to know how the new BSP compiler works, check the Fluid
+Studios site for the document titled "Fast BSP Tree Generation using Binary
+Searches". Although the document says it's unproven, this project proves it
+works quite well.
+
+------------------------------------------------------------------------------
+Getting use out of it
+------------------------------------------------------------------------------
+
+If you want to make use of the results, here's the best way to do so:
+
+  1. Hack the code in GeomDB.* to read/write your own file format.
+
+  - or -
+
+  1. Convert your geometry into a ENT file (see GeomDB.* for information)
+     Although the processor can read OCT files, ENT files are better because
+     they contain materials that alllow entire polygons to be emitters, rather
+     than simple point lights.
+  2. Run the FSRad tool on the file
+  3. Have the tool write out an OCT file (contains the geometry and lightmaps
+     along with the newly remapped polygons and UVs) -- note that the processor
+     may need to split polygons that extend past a lightmap boundary. So the
+     output geometry MAY NOT be the same as the input!
+  4. Convert the OCT file back to your own file format.
+

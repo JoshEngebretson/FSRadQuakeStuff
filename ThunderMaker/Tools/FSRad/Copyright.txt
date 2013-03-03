@@ -1,0 +1,14 @@
+Everything you see in this distribution is Copyright 2001, Paul Nettle and Fluid Studios.
+All rights are reserved.
+
+This software is free for private and personal use. Use at your own risk, Yadda Yadda.
+
+This software is NOT free for commercial use. If you use it, you must pay for it with
+credit (i.e. credit to the author in your readme file or someplace.) Also, please send
+an email to me at: midnight@FluidStudios.com so I can track the software's usage.
+
+Further copyright information will be found in all the source files.
+
+- Thanks,
+- Paul Nettle
+- Fluid Studios
