@@ -33,7 +33,6 @@
 #include "stdafx.h"
 #include "FSRad.h"
 #include "RadPrim.h"
-#include "ProgressDlg.h"
 #include "BSP.h"
 
 // ---------------------------------------------------------------------------------------------------------------------------------
@@ -93,7 +92,7 @@ static	bool	classifyForQuantization(BSP::sBuildInfo & buildInfo)
 
 	for (unsigned int i = 0; i < buildInfo.polys.size(); ++i)
 	{
-		if (!(i&0xff) && buildInfo.progressDialog && buildInfo.progressDialog->stopRequested()) return false;
+		//if (!(i&0xff) && buildInfo.progressDialog && buildInfo.progressDialog->stopRequested()) return false;
 
 		RadPrim &	poly = *buildInfo.polys[i];
 
@@ -157,7 +156,7 @@ static	bool	classifyAndQuantize(BSP::sBuildInfo & buildInfo, BSP::GroupArray & g
 {
 	for (unsigned int i = 0; i < buildInfo.polys.size(); ++i)
 	{
-		if (!(i&0xff) && buildInfo.progressDialog && buildInfo.progressDialog->stopRequested()) return false;
+		//if (!(i&0xff) && buildInfo.progressDialog && buildInfo.progressDialog->stopRequested()) return false;
 
 		RadPrim &	poly = *buildInfo.polys[i];
 		groups[poly.usageIndex()].polys += &poly;
@@ -191,7 +190,7 @@ static	bool	unifyGroups(BSP::sBuildInfo & buildInfo, BSP::GroupArray & groups)
 	{
 		for (unsigned int i = 0; i < groups.size(); ++i)
 		{
-			if (buildInfo.progressDialog && buildInfo.progressDialog->stopRequested()) return false;
+			//if (buildInfo.progressDialog && buildInfo.progressDialog->stopRequested()) return false;
 
 			RadPrimPointerArray &	ppa = groups[i].polys;
 
@@ -242,7 +241,7 @@ static	bool	tryBisectionPlane(BSP::sBuildInfo & buildInfo, const geom::Plane3 & 
 
 	for (unsigned int i = 0; i < buildInfo.polys.size(); ++i)
 	{
-		if ((!(i&0xf)) && buildInfo.progressDialog && buildInfo.progressDialog->stopRequested()) return false;
+		//if ((!(i&0xf)) && buildInfo.progressDialog && buildInfo.progressDialog->stopRequested()) return false;
 
 		const RadPrim &	poly = *buildInfo.polys[i];
 
@@ -290,7 +289,7 @@ static	bool	findOptimalSplitters(BSP::sBuildInfo & buildInfo, BSP::GroupArray & 
 
 	for (unsigned int i = 0; i < groups.size(); ++i)
 	{
-		if (!(i & 0x1) && buildInfo.progressDialog && buildInfo.progressDialog->stopRequested()) return false;
+		//if (!(i & 0x1) && buildInfo.progressDialog && buildInfo.progressDialog->stopRequested()) return false;
 
 		BSP::sGroup &	g = groups[i];
 
@@ -357,7 +356,7 @@ static	bool	findBestSplitter(BSP::sBuildInfo & buildInfo, BSP::GroupArray & grou
 
 	for (unsigned int i = 0; i < groups.size(); ++i)
 	{
-		if (buildInfo.progressDialog && buildInfo.progressDialog->stopRequested()) return false;
+		//if (buildInfo.progressDialog && buildInfo.progressDialog->stopRequested()) return false;
 
 		BSP::sGroup &	g = groups[i];
 
@@ -412,7 +411,7 @@ static	bool	bisectScene(BSP::sBuildInfo & buildInfo, const geom::Plane3 & plane,
 
 	for (unsigned int i = 0; i < buildInfo.polys.size(); ++i)
 	{
-		if (!(i & 0xff) && buildInfo.progressDialog && buildInfo.progressDialog->stopRequested()) return false;
+		//if (!(i & 0xff) && buildInfo.progressDialog && buildInfo.progressDialog->stopRequested()) return false;
 
 		RadPrim &	poly = *buildInfo.polys[i];
 
@@ -474,6 +473,8 @@ static	bool	bisectScene(BSP::sBuildInfo & buildInfo, const geom::Plane3 & plane,
 
 static	bool	updateDisplay(BSP::sBuildInfo &buildInfo, const unsigned int depth)
 {
+	#ifdef FSRAD_WINDOWS_DISABLE
+
 	if (!buildInfo.progressDialog) return true;
 
 	// Update the display
@@ -520,6 +521,7 @@ static	bool	updateDisplay(BSP::sBuildInfo &buildInfo, const unsigned int depth)
 		buildInfo.progressDialog->setLabel5("Max depth:");
 		buildInfo.progressDialog->setText5(dsp);
 	}
+	#endif
 
 	return true;
 }
@@ -538,6 +540,7 @@ bool	BSP::build(sBuildInfo & buildInfo)
 	buildInfo.totalNodes = 0;
 	buildInfo.lastPercent = 0.0f;
 
+#ifdef FSRAD_WINDOWS_DISABLE
 	if (buildInfo.progressDialog)
 	{
 		char	dsp[90];
@@ -548,6 +551,7 @@ bool	BSP::build(sBuildInfo & buildInfo)
 
 		buildInfo.progressDialog->setCurrentStatus("Sorting...");
 	}
+#endif	
 
 	// Convert the polys to pointers
 	{
@@ -571,12 +575,14 @@ bool	BSP::build(sBuildInfo & buildInfo)
 
 	// Pre-classify the polygons
 
-	if (buildInfo.progressDialog) buildInfo.progressDialog->setCurrentStatus("Quantizing...");
+	//if (buildInfo.progressDialog) buildInfo.progressDialog->setCurrentStatus("Quantizing...");
+	
 	if (!classifyForQuantization(buildInfo)) return false;
 
 	// Recursively build the tree
 
-	if (buildInfo.progressDialog) buildInfo.progressDialog->setCurrentStatus("Building the BSP tree...");
+	//if (buildInfo.progressDialog) buildInfo.progressDialog->setCurrentStatus("Building the BSP tree...");
+	
 	return recursiveBuild(buildInfo, 0);
 }
 

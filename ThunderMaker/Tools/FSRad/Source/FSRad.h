@@ -31,6 +31,8 @@
 #ifndef	_H_FSRAD
 #define _H_FSRAD
 
+#ifdef FSRAD_WINDOWS_DISABLE
+
 // ---------------------------------------------------------------------------------------------------------------------------------
 // Module setup (required includes, macros, etc.)
 // ---------------------------------------------------------------------------------------------------------------------------------
@@ -55,6 +57,7 @@ public:
 };
 
 extern RadApp theApp;
+#endif
 
 //{{AFX_INSERT_LOCATION}}
 #endif // _H_FSRAD

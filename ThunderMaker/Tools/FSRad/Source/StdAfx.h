@@ -33,21 +33,8 @@
 #ifndef	_H_STDAFX
 #define _H_STDAFX
 
-#define VC_EXTRALEAN		// Exclude rarely-used stuff from Windows headers
-
-#include <afxwin.h>         // MFC core and standard components
-#include <afxext.h>         // MFC extensions
-#include <afxdtctl.h>		// MFC support for Internet Explorer 4 Common Controls
-#ifndef _AFX_NO_AFXCMN_SUPPORT
-#include <afxcmn.h>			// MFC support for Windows Common Controls
-#endif // _AFX_NO_AFXCMN_SUPPORT
-
-// ---------------------------------------------------------------------------------------------------------------------------------
-// Includes specific to this application
-// ---------------------------------------------------------------------------------------------------------------------------------
-
-#include "../../Include/fstl/fstl"
-#include "../../Include/geom/geom"
+#include "fstl.h"
+#include "geom.h"
 
 //{{AFX_INSERT_LOCATION}}
 #endif // _H_STDAFX

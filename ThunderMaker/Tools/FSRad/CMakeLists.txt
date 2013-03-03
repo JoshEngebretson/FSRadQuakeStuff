@@ -7,6 +7,9 @@ include_directories(
 set (FSRAD_SRC
 
     Source/3dutils.cpp
+    Source/BeamTree.cpp
+    Source/RadPrim.cpp
+    Source/BSP.cpp
 
 )
 

@@ -37,14 +37,12 @@
 // Module setup (required includes, macros, etc.)
 // ---------------------------------------------------------------------------------------------------------------------------------
 
-#include "../../Include/fstl/fstl"
-#include "../../Include/geom/geom"
+#include "fstl.h"
+#include "geom.h"
 
 // ---------------------------------------------------------------------------------------------------------------------------------
 // Forward declarations
 // ---------------------------------------------------------------------------------------------------------------------------------
-
-class	ProgressDlg;
 
 // ---------------------------------------------------------------------------------------------------------------------------------
 
@@ -58,8 +56,7 @@ public:
 		RadPrimList *			scenePolys;
 		RadPrimPointerArray		polys;
 		unsigned int			quantizeResolution;
-		float				leastDepthErrorBoundsPercent;
-		ProgressDlg *			progressDialog;
+		float					leastDepthErrorBoundsPercent;
 		unsigned int			totalPolys;
 		unsigned int			originalPolys;
 		unsigned int			polysUsed;
