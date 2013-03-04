@@ -1,8 +1,9 @@
 
-set(CMAKE_OSX_ARCHITECTURES "i386")
+#set(CMAKE_OSX_ARCHITECTURES "i386")
 
 include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/Vendor/jansson/src
 )
 
 add_definitions( -DDOUBLEVEC_T -DQBSP_VERSION=0.5 -DUSE_PTHREADS)
@@ -57,6 +58,7 @@ set (QVIS_SRC
 
 set (QTHUNDER_SRC
 
+    qthunder/qentities.c
     qthunder/qthunder.c
 )
 
@@ -92,7 +94,8 @@ add_custom_command(TARGET qvis
 add_executable(qthunder ${QTHUNDER_SRC})
 
 target_link_libraries(qthunder  
-    qcommon        
+    qcommon
+    jansson        
 )
 
 get_target_property(QTHUNDERBIN qthunder LOCATION)
