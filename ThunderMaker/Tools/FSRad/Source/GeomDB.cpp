@@ -37,6 +37,9 @@
 #include "Ent.h"
 #include "AseFile.h"
 
+#include "jansson.h"
+#include "sys/stat.h"
+
 // ---------------------------------------------------------------------------------------------------------------------------------
 
 #ifdef _DEBUG
@@ -58,6 +61,120 @@ static char THIS_FILE[] = __FILE__;
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------
+
+bool GeomDB::readJSON(const fstl::string & filename, const geom::Color3 & defaultReflectivity)
+{
+
+	FILE *	fp = NULL;
+	char *	buf = NULL;
+	
+	// Check the file length
+
+	printf("HEY!\n");
+
+	unsigned int	fileLength;
+	struct stat st;
+	if(stat(filename.asArray(), &st)) fileLength = 0;
+	fileLength = st.st_size;
+	if (!fileLength) 
+	{
+		assert(0);
+	}
+
+	// Allocate RAM
+
+	buf = new char[fileLength+1];
+	if (!buf)
+	{
+		assert(0);
+	}
+
+	memset(buf, 0, fileLength+1);
+
+	// Open up the file
+
+	fp = fopen(filename.asArray(), "rb");
+	if (!fp) 
+	{
+		assert(0);
+	}
+
+	// Read it in...
+
+	if (fread(buf, fileLength, 1, fp) != 1)
+	{
+		assert(0);
+	}
+
+	// Done...
+
+	fclose(fp);
+	fp = NULL;
+
+	json_error_t jerror;
+	json_t *jworld = json_loads(buf, 0, &jerror);	
+
+	unsigned int	polyID = 0;
+	json_t* jvertices = json_object_get(jworld, "vertices");
+	size_t numverts = json_array_size(jvertices);
+
+	unsigned int	totalPolys = numverts / 9;
+
+	printf("Reading %i polygons\n", totalPolys);
+
+	// Reserve for speed
+
+	lightmaps().reserve(totalPolys);
+	polys().reserve(totalPolys);
+	RadLMap	emptyLightmap(128, 128, static_cast<int>(polyID));
+
+	int k = 0;
+	for (unsigned int j = 0; j < totalPolys; ++j, ++polyID)
+	{
+
+		RadPrim		poly;
+
+		geom::Point3 p0;
+		geom::Point3 p1;
+		geom::Point3 p2;
+
+		double scale = 10.0;
+		p0.x() = json_real_value(json_array_get(jvertices, k++))/scale;
+		p0.y() = json_real_value(json_array_get(jvertices, k++))/scale;
+		p0.z() = json_real_value(json_array_get(jvertices, k++))/scale;	
+
+		p1.x() = json_real_value(json_array_get(jvertices, k++))/scale;
+		p1.y() = json_real_value(json_array_get(jvertices, k++))/scale;
+		p1.z() = json_real_value(json_array_get(jvertices, k++))/scale;	
+
+		p2.x() = json_real_value(json_array_get(jvertices, k++))/scale;
+		p2.y() = json_real_value(json_array_get(jvertices, k++))/scale;
+		p2.z() = json_real_value(json_array_get(jvertices, k++))/scale;	
+
+		//printf("%f %f %f\n", p0.x(),  p1.x(), p2.x());
+
+		poly.xyz() += p0;
+		poly.xyz() += p1;
+		poly.xyz() += p2;
+		poly.uv() += geom::Point2(0,0);
+		poly.uv() += geom::Point2(0,0);
+		poly.uv() += geom::Point2(0,0);
+		poly.textureID() = polyID;
+		poly.calcPlane(false);
+
+		poly.illuminationColor() = geom::Color3(0,0,0);
+		poly.reflectanceColor() = defaultReflectivity;
+
+		polys() += poly;
+	}
+
+
+
+	//delete [] buf;
+
+
+	return true;
+}
 
 bool	GeomDB::readENT(const fstl::string & filename, const geom::Color3 & defaultReflectivity)
 {
@@ -131,7 +248,7 @@ bool	GeomDB::readENT(const fstl::string & filename, const geom::Color3 & default
 				}
 				else
 				{
-					poly.illuminationColor() = geom::Color3(0,0,0);
+					poly.illuminationColor() = geom::Color3(.1,.1,.1);
 					poly.reflectanceColor() = defaultReflectivity;
 				}
 

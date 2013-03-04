@@ -3,6 +3,7 @@
 
 include_directories(
 	Include
+    ${CMAKE_SOURCE_DIR}/Vendor/jansson/src
 )
 
 set (FSRAD_SRC
@@ -25,6 +26,11 @@ set (FSRAD_SRC
 )
 
 add_executable(fsrad ${FSRAD_SRC})
+
+target_link_libraries(fsrad  
+    jansson        
+)
+
 
 get_target_property(FSRADBIN fsrad LOCATION)
  

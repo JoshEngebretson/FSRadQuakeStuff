@@ -71,7 +71,7 @@ msurface_t* BuildSurfaceList (dface_t *face)
         // FIXME once we go for textures
         t /= 64;//tinfo->texture->height;
 
-        VectorCopy (vec, (vec_t *) poly->verts[i]);
+        VectorCopy (vec, (vec_t *) &poly->verts[i]);
         poly->verts[i][3] = s;
         poly->verts[i][4] = t;
 
@@ -85,7 +85,8 @@ msurface_t* BuildSurfaceList (dface_t *face)
 
     int keeptjunctions = 0;
 
-    if (!keeptjunctions /*&& !(tinfo->flags & SURF_UNDERWATER)*/ )
+    #define SURF_UNDERWATER     0x80
+    if (!keeptjunctions && !(tinfo->flags & SURF_UNDERWATER) )
     {
         for (i = 0 ; i < lnumverts ; ++i)
         {
@@ -93,9 +94,9 @@ msurface_t* BuildSurfaceList (dface_t *face)
             vec_t *prev, *this, *next;
             float f;
 
-            prev = (vec_t*) poly->verts[(i + lnumverts - 1) % lnumverts];
-            this = (vec_t*) poly->verts[i];
-            next = (vec_t*) poly->verts[(i + 1) % lnumverts];
+            prev = poly->verts[(i + lnumverts - 1) % lnumverts];
+            this = poly->verts[i];
+            next = poly->verts[(i + 1) % lnumverts];
 
             VectorSubtract( this, prev, v1 );
             VectorNormalize( v1 );
@@ -132,6 +133,9 @@ msurface_t* BuildSurfaceList (dface_t *face)
 static void process_worldspawn(entity_t* worldspawn)
 {
     int i;
+    vec_t *v0, *v1, *v2;
+
+    json_t *jworld = json_object();
 
     epair_t* ep = worldspawn->epairs;
     while(ep) {        
@@ -144,13 +148,61 @@ static void process_worldspawn(entity_t* worldspawn)
     msurface_t* s;
     msurface_t* surfaces = NULL;
 
+    //0,1,2 0,2,3 0,3,4 
+
+    
     for (i = 0; i < model->numfaces; i++)
     {        
         s = BuildSurfaceList(face);
         s->next = surfaces;
         surfaces = s;
-        face++;
+        face++;        
     }
+
+    json_t* jvertices = json_array();
+
+    json_object_set(jworld, "vertices", jvertices);
+
+    int numpolys = 0;
+    s = surfaces;
+    while (s)
+    {
+
+        glpoly_t* polys = s->polys;
+
+        if (polys->numverts < 3)
+        {
+            s = s->next;
+            continue;
+        }
+
+        numpolys += s->polys->numverts - 2;
+
+        for (i = 0; i < polys->numverts - 2; i++)
+        {
+            json_array_append_new(jvertices, json_real(polys->verts[0][0]));
+            json_array_append_new(jvertices, json_real(polys->verts[0][1]));
+            json_array_append_new(jvertices, json_real(polys->verts[0][2]));
+
+            json_array_append_new(jvertices, json_real(polys->verts[i][0]));
+            json_array_append_new(jvertices, json_real(polys->verts[i][1]));
+            json_array_append_new(jvertices, json_real(polys->verts[i][2]));
+
+            json_array_append_new(jvertices, json_real(polys->verts[i+1][0]));
+            json_array_append_new(jvertices, json_real(polys->verts[i+1][1]));
+            json_array_append_new(jvertices, json_real(polys->verts[i+1][2]));
+
+        }
+
+        s = s->next;
+    }
+
+    json_object_set(jworld, "numpolys", json_integer(numpolys));
+
+    const char* dump = json_dumps(jworld, 0);
+    FILE* file = fopen("hey.jsn", "wb");
+    fwrite(dump, 1,  strlen(dump) + 1, file);
+    fclose(file);
     
 }
 

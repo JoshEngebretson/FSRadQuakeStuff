@@ -64,6 +64,7 @@ virtual					~GeomDB();
 
 	// Implementation		
 
+		bool			readJSON(const fstl::string & filename, const geom::Color3 & defaultReflectivity);
 		bool			readENT(const fstl::string & filename, const geom::Color3 & defaultReflectivity);
 		bool			readASE(const fstl::string & filename, const geom::Color3 & defaultReflectivity);
 		bool			readOCT(const fstl::string & filename, const geom::Color3 & defaultReflectivity);

@@ -1341,6 +1341,19 @@ void	RadGen::go()
 					//}
 				}
 			}
+			else if (ext == "jsn")
+			{
+				if (!geometry().readJSON(inputFilename(), defaultReflectivity()))
+				{
+					// Error if they didn't ask to stop
+
+					//if (!progress()->stopRequested())
+					//{
+					//	throw "Unable to load the geometry";
+					//}
+				}
+			}
+
 		}
 
 		// Generate lightmaping coordinates and lightmaps for these polygons
@@ -1549,7 +1562,7 @@ void	RadGen::readDefaultParms()
 	writeRawLightmaps() = true;//theApp.GetProfileInt("Options", "outputRawDirectoryFlag", 0) ? true:false;
 	writeOctFile() = true;//theApp.GetProfileInt("Options", "outputOctFileFlag", 1) ? true:false;
 	writeOctFilename() = "output.oct"; //fstl::string(theApp.GetProfileString("Options", "outputOctFilename", defaultOctOutput.asArray()));
-	inputFilename() = "cornellbox.ent";//fstl::string(theApp.GetProfileString("Options", "inputFilename", ""));
+	inputFilename() = "hey.jsn";//cornellbox.ent";//fstl::string(theApp.GetProfileString("Options", "inputFilename", ""));
 
 	// General parms
 
