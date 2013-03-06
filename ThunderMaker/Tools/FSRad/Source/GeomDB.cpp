@@ -114,19 +114,23 @@ bool GeomDB::readJSON(const fstl::string & filename, const geom::Color3 & defaul
 	json_error_t jerror;
 	json_t *jworld = json_loads(buf, 0, &jerror);	
 
+	printf("%s\n", jerror.text);
+
 	unsigned int	polyID = 0;
 	json_t* jvertices = json_object_get(jworld, "vertices");
 	size_t numverts = json_array_size(jvertices);
 
 	unsigned int	totalPolys = numverts / 9;
 
-	printf("Reading %i polygons\n", totalPolys);
+	printf("Reading %i %i polygons\n", numverts, totalPolys);
 
 	// Reserve for speed
 
 	lightmaps().reserve(totalPolys);
 	polys().reserve(totalPolys);
 	RadLMap	emptyLightmap(128, 128, static_cast<int>(polyID));
+
+	double scale = 1;
 
 	int k = 0;
 	for (unsigned int j = 0; j < totalPolys; ++j, ++polyID)
@@ -138,20 +142,22 @@ bool GeomDB::readJSON(const fstl::string & filename, const geom::Color3 & defaul
 		geom::Point3 p1;
 		geom::Point3 p2;
 
-		double scale = 10.0;
-		p0.x() = json_real_value(json_array_get(jvertices, k++))/scale;
-		p0.y() = json_real_value(json_array_get(jvertices, k++))/scale;
-		p0.z() = json_real_value(json_array_get(jvertices, k++))/scale;	
+		
+		p0.x() = json_integer_value(json_array_get(jvertices, k++))/scale;
+		p0.y() = json_integer_value(json_array_get(jvertices, k++))/scale;
+		p0.z() = json_integer_value(json_array_get(jvertices, k++))/scale;	
 
-		p1.x() = json_real_value(json_array_get(jvertices, k++))/scale;
-		p1.y() = json_real_value(json_array_get(jvertices, k++))/scale;
-		p1.z() = json_real_value(json_array_get(jvertices, k++))/scale;	
+		p1.x() = json_integer_value(json_array_get(jvertices, k++))/scale;
+		p1.y() = json_integer_value(json_array_get(jvertices, k++))/scale;
+		p1.z() = json_integer_value(json_array_get(jvertices, k++))/scale;	
 
-		p2.x() = json_real_value(json_array_get(jvertices, k++))/scale;
-		p2.y() = json_real_value(json_array_get(jvertices, k++))/scale;
-		p2.z() = json_real_value(json_array_get(jvertices, k++))/scale;	
+		p2.x() = json_integer_value(json_array_get(jvertices, k++))/scale;
+		p2.y() = json_integer_value(json_array_get(jvertices, k++))/scale;
+		p2.z() = json_integer_value(json_array_get(jvertices, k++))/scale;	
 
-		//printf("%f %f %f\n", p0.x(),  p1.x(), p2.x());
+		printf("%f %f %f ", p0.x(),  p0.y(), p0.z());
+		printf("%f %f %f ", p1.x(),  p1.y(), p1.z());
+		printf("%f %f %f \n", p2.x(),  p2.y(), p2.z());
 
 		poly.xyz() += p0;
 		poly.xyz() += p1;
@@ -168,7 +174,31 @@ bool GeomDB::readJSON(const fstl::string & filename, const geom::Color3 & defaul
 		polys() += poly;
 	}
 
+	for (int j = 0; j < 0; j++)
+	{
+		float x = 512 - rand()%1024;
+		float y = 512 - rand()%1024;
+		float z = 512 - rand()%1024;
 
+		x /= scale;
+		y /= scale;
+		z /= scale;
+
+		RadPatch	patch1;
+		patch1.area() = 0;
+		patch1.origin() = geom::Point3(x, y, z);
+		patch1.energy() = geom::Color3(1, 1, 1) * static_cast<float>(1000);
+		patch1.plane() = geom::Plane3(patch1.origin(), geom::Vector3(0, 1, 0));
+		lights() += patch1;
+
+		RadPatch	patch2;
+		patch2.area() = 0;
+		patch2.origin() = geom::Point3(x, y, z);
+		patch2.energy() = geom::Color3(1, 1, 1) * static_cast<float>(1000);
+		patch2.plane() = geom::Plane3(patch2.origin(), geom::Vector3(0, -1, 0));
+		lights() += patch2;
+
+	}
 
 	//delete [] buf;
 
@@ -248,7 +278,7 @@ bool	GeomDB::readENT(const fstl::string & filename, const geom::Color3 & default
 				}
 				else
 				{
-					poly.illuminationColor() = geom::Color3(.1,.1,.1);
+					poly.illuminationColor() = geom::Color3(0,0,0);
 					poly.reflectanceColor() = defaultReflectivity;
 				}
 

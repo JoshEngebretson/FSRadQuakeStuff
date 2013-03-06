@@ -1,4 +1,5 @@
 #include "jansson.h"
+#include "assert.h"
 #include <common/cmdlib.h>
 #include <common/bspfile.h>
 
@@ -11,7 +12,7 @@ typedef struct glpoly_s
     struct  glpoly_s    *next;    
     int     numverts;
     int     flags;          // for SURF_UNDERWATER
-    float   verts[4][VERTEXSIZE];   // variable sized (xyz s1t1 s2t2)
+    vec_t   verts[4][VERTEXSIZE];   // variable sized (xyz s1t1 s2t2)
 
 } glpoly_t;
 
@@ -19,24 +20,26 @@ typedef struct msurface_s
 {
     struct  msurface_s *next;    
     glpoly_t* polys;
+    dface_t *face;
 
 } msurface_t;
 
 msurface_t* BuildSurfaceList (dface_t *face)
 {
-    dedge_t *pedges, *r_pedge;
+    dedge_t *r_pedge;
     int i, lindex, lnumverts;
     glpoly_t* poly;
     msurface_t* surf;
     texinfo_t* tinfo;
-    vec_t       *vec;
+    float       *vec;
     float       s, t;
 
-    pedges = &dedges[0];
     tinfo = &texinfo[face->texinfo];
 
     surf = malloc(sizeof(msurface_t));
     memset(surf, 0, sizeof(msurface_t));
+
+    surf->face = face;
 
     // reconstruct the polygon    
     lnumverts = face->numedges;
@@ -53,29 +56,33 @@ msurface_t* BuildSurfaceList (dface_t *face)
 
         if (lindex > 0)
         {
-            r_pedge = &pedges[lindex];
-            vec = (vec_t *) dvertexes[r_pedge->v[0]].point;
+            r_pedge = &dedges[lindex];
+            vec = (float *) dvertexes[r_pedge->v[0]].point;
         }
         else
         {
-            r_pedge = &pedges[-lindex];
-            vec = (vec_t *) dvertexes[r_pedge->v[1]].point;
+            r_pedge = &dedges[-lindex];
+            vec = (float *) dvertexes[r_pedge->v[1]].point;
         }
-        s = DotProduct (vec, (vec_t *) tinfo->vecs[0]) + tinfo->vecs[0][3];
+
+        s = DotProduct (vec, (float *) tinfo->vecs[0]) + tinfo->vecs[0][3];
 
         // FIXME once we go for textures
         s /= 64;//tinfo->texture->width;
 
-        t = DotProduct (vec, (vec_t *) tinfo->vecs[1]) + tinfo->vecs[1][3];
+        t = DotProduct (vec, (float *) tinfo->vecs[1]) + tinfo->vecs[1][3];
 
         // FIXME once we go for textures
         t /= 64;//tinfo->texture->height;
 
-        VectorCopy (vec, (vec_t *) &poly->verts[i]);
+        poly->verts[i][0] = vec[0];
+        poly->verts[i][1] = vec[1];
+        poly->verts[i][2] = vec[2];
+
         poly->verts[i][3] = s;
         poly->verts[i][4] = t;
 
-        //printf("%f, %f, %f\n", poly->verts[0][0], poly->verts[1][1], poly->verts[2][2]);
+        //printf("%i %i %f, %f, %f\n", r_pedge->v[0], r_pedge->v[1], poly->verts[i][0], poly->verts[i][1], poly->verts[i][2]);
 
     }
 
@@ -86,7 +93,7 @@ msurface_t* BuildSurfaceList (dface_t *face)
     int keeptjunctions = 0;
 
     #define SURF_UNDERWATER     0x80
-    if (!keeptjunctions && !(tinfo->flags & SURF_UNDERWATER) )
+    if (!keeptjunctions) // && !(tinfo->flags & SURF_UNDERWATER) )
     {
         for (i = 0 ; i < lnumverts ; ++i)
         {
@@ -147,12 +154,15 @@ static void process_worldspawn(entity_t* worldspawn)
 
     msurface_t* s;
     msurface_t* surfaces = NULL;
-
-    //0,1,2 0,2,3 0,3,4 
-
     
     for (i = 0; i < model->numfaces; i++)
     {        
+        texinfo_t* tinfo = &texinfo[face->texinfo];
+        if (tinfo->flags)
+        {
+            face++;
+            continue;
+        }
         s = BuildSurfaceList(face);
         s->next = surfaces;
         surfaces = s;
@@ -179,18 +189,30 @@ static void process_worldspawn(entity_t* worldspawn)
         numpolys += s->polys->numverts - 2;
 
         for (i = 0; i < polys->numverts - 2; i++)
-        {
-            json_array_append_new(jvertices, json_real(polys->verts[0][0]));
-            json_array_append_new(jvertices, json_real(polys->verts[0][1]));
-            json_array_append_new(jvertices, json_real(polys->verts[0][2]));
+        {   
+            int ii = 0;
+            int ij = i + 1;
+            int ik = i + 2;
 
-            json_array_append_new(jvertices, json_real(polys->verts[i][0]));
-            json_array_append_new(jvertices, json_real(polys->verts[i][1]));
-            json_array_append_new(jvertices, json_real(polys->verts[i][2]));
+            if (false)//s->face->side)
+            {
+                ii = i + 2;
 
-            json_array_append_new(jvertices, json_real(polys->verts[i+1][0]));
-            json_array_append_new(jvertices, json_real(polys->verts[i+1][1]));
-            json_array_append_new(jvertices, json_real(polys->verts[i+1][2]));
+                ik = 0;
+
+            }
+
+            json_array_append_new(jvertices, json_integer((int)polys->verts[ii][0]));
+            json_array_append_new(jvertices, json_integer((int)polys->verts[ii][1]));
+            json_array_append_new(jvertices, json_integer((int)polys->verts[ii][2]));
+
+            json_array_append_new(jvertices, json_integer((int)polys->verts[ij][0]));
+            json_array_append_new(jvertices, json_integer((int)polys->verts[ij][1]));
+            json_array_append_new(jvertices, json_integer((int)polys->verts[ij][2]));
+
+            json_array_append_new(jvertices, json_integer((int)polys->verts[ik][0]));
+            json_array_append_new(jvertices, json_integer((int)polys->verts[ik][1]));
+            json_array_append_new(jvertices, json_integer((int)polys->verts[ik][2]));
 
         }
 
@@ -222,7 +244,7 @@ static void process() {
 
         epair = e->epairs;
         while(epair) {        
-            //printf("%s:%s\n", epair->key, epair->value);
+            printf("%s:%s\n", epair->key, epair->value);
             epair  = epair->next;
         }
 
