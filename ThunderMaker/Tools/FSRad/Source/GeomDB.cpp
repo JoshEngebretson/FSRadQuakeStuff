@@ -155,9 +155,9 @@ bool GeomDB::readJSON(const fstl::string & filename, const geom::Color3 & defaul
 		p2.y() = json_integer_value(json_array_get(jvertices, k++))/scale;
 		p2.z() = json_integer_value(json_array_get(jvertices, k++))/scale;	
 
-		printf("%f %f %f ", p0.x(),  p0.y(), p0.z());
-		printf("%f %f %f ", p1.x(),  p1.y(), p1.z());
-		printf("%f %f %f \n", p2.x(),  p2.y(), p2.z());
+		//printf("%f %f %f ", p0.x(),  p0.y(), p0.z());
+		//printf("%f %f %f ", p1.x(),  p1.y(), p1.z());
+		//printf("%f %f %f \n", p2.x(),  p2.y(), p2.z());
 
 		poly.xyz() += p0;
 		poly.xyz() += p1;
@@ -171,7 +171,12 @@ bool GeomDB::readJSON(const fstl::string & filename, const geom::Color3 & defaul
 		poly.illuminationColor() = geom::Color3(0,0,0);
 		poly.reflectanceColor() = defaultReflectivity;
 
-		polys() += poly;
+		float f = poly.plane().D();
+		if (f != f)// NAN
+			printf("WARNING: Degenerate poly!\n");					
+		else
+			polys() += poly;
+
 	}
 
 	for (int j = 0; j < 0; j++)
