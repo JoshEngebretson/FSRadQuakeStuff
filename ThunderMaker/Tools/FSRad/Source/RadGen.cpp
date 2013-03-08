@@ -1566,7 +1566,7 @@ void	RadGen::readDefaultParms()
 
 	// General parms
 
-	convergence() = 1;//theApp.GetProfileInt("Options", "convergence", 10);
+	convergence() = 10;//theApp.GetProfileInt("Options", "convergence", 10);
 	maxIterations() = false;//theApp.GetProfileInt("Options", "enableMaxIterations", 0) ? true:false;
 	maxIterationsCount() = 1024;//theApp.GetProfileInt("Options", "maxIterationsCount", 1000);
 	areaLightMultiplier() = 1000000;//theApp.GetProfileInt("Options", "areaLightMultiplier", 1000000);

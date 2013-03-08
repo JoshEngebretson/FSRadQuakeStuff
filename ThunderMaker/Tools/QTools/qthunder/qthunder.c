@@ -219,6 +219,48 @@ static void process_worldspawn(entity_t* worldspawn)
         s = s->next;
     }
 
+    entity_t* e;
+    epair_t* epair;
+
+    json_t* jlights = json_array();
+
+    json_object_set(jworld, "lights", jlights);
+
+    for (i = 0; i < num_entities; i++)
+    {
+        e = &entities[i];
+        if (strcmp(e->classname, "light"))
+            continue;            
+
+        float x, y, z;
+        float light;
+
+        epair = e->epairs;
+        while(epair) {        
+
+            if (!strcmp(epair->key, "origin"))
+            {   
+                sscanf(epair->value, "%f %f %f", &x, &y, &z);
+            }
+
+            if (!strcmp(epair->key, "light"))
+            {   
+                sscanf(epair->value, "%f", &light);
+            }
+                
+            epair  = epair->next;
+        }
+
+        printf("%f %f %f %f\n", x, y, z, light);
+
+        json_array_append_new(jlights, json_integer((int)x));
+        json_array_append_new(jlights, json_integer((int)y));
+        json_array_append_new(jlights, json_integer((int)z));
+        json_array_append_new(jlights, json_integer((int)light));
+
+    }
+
+
     json_object_set(jworld, "numpolys", json_integer(numpolys));
 
     const char* dump = json_dumps(jworld, 0);
@@ -241,12 +283,6 @@ static void process() {
         e = &entities[j];
         if (!strcmp(e->classname, "worldspawn"))
             process_worldspawn(e);
-
-        epair = e->epairs;
-        while(epair) {        
-            printf("%s:%s\n", epair->key, epair->value);
-            epair  = epair->next;
-        }
 
     }
 
