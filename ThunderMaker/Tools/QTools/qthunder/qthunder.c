@@ -44,7 +44,7 @@ msurface_t* BuildSurfaceList (dface_t *face)
     // reconstruct the polygon    
     lnumverts = face->numedges;
 
-    poly = (glpoly_t*) malloc (sizeof(glpoly_t) + (lnumverts-4) * VERTEXSIZE*sizeof(float));
+    poly = (glpoly_t*) malloc (sizeof(glpoly_t) + (lnumverts-4) * VERTEXSIZE*sizeof(vec_t));
     poly->next = NULL;//fa->polys;
     poly->flags = tinfo->flags;
     surf->polys = poly;
@@ -202,17 +202,17 @@ static void process_worldspawn(entity_t* worldspawn)
 
             }
 
-            json_array_append_new(jvertices, json_real(polys->verts[ii][0]));
-            json_array_append_new(jvertices, json_real(polys->verts[ii][1]));
-            json_array_append_new(jvertices, json_real(polys->verts[ii][2]));
+            json_array_append_new(jvertices, json_real((float)polys->verts[ii][0]));
+            json_array_append_new(jvertices, json_real((float)polys->verts[ii][1]));
+            json_array_append_new(jvertices, json_real((float)polys->verts[ii][2]));
 
-            json_array_append_new(jvertices, json_real(polys->verts[ij][0]));
-            json_array_append_new(jvertices, json_real(polys->verts[ij][1]));
-            json_array_append_new(jvertices, json_real(polys->verts[ij][2]));
+            json_array_append_new(jvertices, json_real((float)polys->verts[ij][0]));
+            json_array_append_new(jvertices, json_real((float)polys->verts[ij][1]));
+            json_array_append_new(jvertices, json_real((float)polys->verts[ij][2]));
 
-            json_array_append_new(jvertices, json_real(polys->verts[ik][0]));
-            json_array_append_new(jvertices, json_real(polys->verts[ik][1]));
-            json_array_append_new(jvertices, json_real(polys->verts[ik][2]));
+            json_array_append_new(jvertices, json_real((float)polys->verts[ik][0]));
+            json_array_append_new(jvertices, json_real((float)polys->verts[ik][1]));
+            json_array_append_new(jvertices, json_real((float)polys->verts[ik][2]));
 
         }
 

@@ -72,6 +72,8 @@ inline const	Point2Array &		uv() const		{return _uv;}
 inline 		Plane3 &		plane()			{return _plane;}
 inline const	Plane3 &		plane()	const		{return _plane;}
 
+	  static fstl::array<Plane3> allPlanes;
+
 protected:
 
 	// Data

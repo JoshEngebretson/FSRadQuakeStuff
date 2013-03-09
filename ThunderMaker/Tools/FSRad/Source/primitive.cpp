@@ -36,7 +36,9 @@ using namespace geom;
 
 // ---------------------------------------------------------------------------------------------------------------------------------
 
-static	const	float	EPSILON = 1.0e-5f;
+static	const	float	EPSILON = .01;
+
+fstl::array<Plane3> Primitive::allPlanes;
 
 // ---------------------------------------------------------------------------------------------------------------------------------
 
@@ -135,6 +137,22 @@ void	Primitive::calcPlane(const bool counterClock)
 	Vector3	v1 = xyz()[2] - xyz()[1];
 	plane().vector() = v1 % v0;
 	if (!counterClock) plane().vector() = -plane().vector();
+
+	unsigned int i;
+	for ( i = 0; i < allPlanes.size(); i++)
+	{
+		if (fabs (plane().D() - allPlanes[i].D()) < .01f &&
+			fabs (plane().normal().x() - allPlanes[i].normal().x()) < .01f &&
+			fabs (plane().normal().y() - allPlanes[i].normal().y()) < .01f &&
+			fabs (plane().normal().z() - allPlanes[i].normal().z()) < .01f) 
+			{
+				plane() = allPlanes[i];
+				break;
+			}
+	}
+
+	if (i == allPlanes.size())
+		allPlanes += plane();
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------------
