@@ -1540,9 +1540,9 @@ void	RadGen::readDefaultParms()
 
 	// Octree parameters
 
-	octreeThreshold() = 1000000;//theApp.GetProfileInt("Options", "OctreePolysPerNode", 50000);
+	octreeThreshold() = 50000;//theApp.GetProfileInt("Options", "OctreePolysPerNode", 50000);
 	octreeMaxDepth() = 50;//theApp.GetProfileInt("Options", "OctreeMaxDepth", 50);
-	octreeMinRadius() = 5.0f;//static_cast<float>(atof(theApp.GetProfileString("Options", "OctreeMinRadius", "5.0")));
+	octreeMinRadius() = 5;//static_cast<float>(atof(theApp.GetProfileString("Options", "OctreeMinRadius", "5.0")));
 
 	// Reflectivity
 
@@ -1553,7 +1553,7 @@ void	RadGen::readDefaultParms()
 
 	// BSP parameters
 
-	bspMinSplitRange() = 5.0f;//static_cast<float>(atof(theApp.GetProfileString("Options", "BSPMinSplitRange", "5.0")));
+	bspMinSplitRange() = 5;//static_cast<float>(atof(theApp.GetProfileString("Options", "BSPMinSplitRange", "5.0")));
 	bspGaussianResolution() = 8;//theApp.GetProfileInt("Options", "BSPGaussianResolution", 8);
 
 	// Input/output parameters
@@ -1566,16 +1566,17 @@ void	RadGen::readDefaultParms()
 
 	// General parms
 
-	convergence() = 10;//theApp.GetProfileInt("Options", "convergence", 10);
-	maxIterations() = false;//theApp.GetProfileInt("Options", "enableMaxIterations", 0) ? true:false;
-	maxIterationsCount() = 1024;//theApp.GetProfileInt("Options", "maxIterationsCount", 1000);
+	convergence() = 1;//theApp.GetProfileInt("Options", "convergence", 10);
+	maxIterations() = true;//theApp.GetProfileInt("Options", "enableMaxIterations", 0) ? true:false;
+	maxIterationsCount() = 250;//theApp.GetProfileInt("Options", "maxIterationsCount", 1000);
 	areaLightMultiplier() = 1000000;//theApp.GetProfileInt("Options", "areaLightMultiplier", 1000000);
 	pointLightMultiplier() = 0.6f;//static_cast<float>(atof(theApp.GetProfileString("Options", "pointLightMultiplier", "0.6")));
+	ambientTerm() = false;//theApp.GetProfileInt("Options", "ambientTerm", 1) ? true:false;
+	useNusselt() = false;//theApp.GetProfileInt("Options", "useNusselt", 0) ? true:false;
+	
+	directLightOnly() = true;//theApp.GetProfileInt("Options", "directLightOnly", 0) ? true:false;
 	subdivisionU() = 4;//theApp.GetProfileInt("Options", "subdivisionU", 4);
 	subdivisionV() = 4;//theApp.GetProfileInt("Options", "subdivisionV", 4);
-	ambientTerm() = true;//theApp.GetProfileInt("Options", "ambientTerm", 1) ? true:false;
-	useNusselt() = false;//theApp.GetProfileInt("Options", "useNusselt", 0) ? true:false;
-	directLightOnly() = false;//theApp.GetProfileInt("Options", "directLightOnly", 0) ? true:false;
 	adaptiveMaxSubdivisionU() = 128;//theApp.GetProfileInt("Options", "adaptiveMaxSubdivisionU", 256);
 	adaptiveMaxSubdivisionV() = 128;//theApp.GetProfileInt("Options", "adaptiveMaxSubdivisionV", 256);
 	adaptivePatchSubdivision() = true;//theApp.GetProfileInt("Options", "adaptivePatchSubdivision", 1) ? true:false;
@@ -1586,9 +1587,9 @@ void	RadGen::readDefaultParms()
 	// Post-processing parms
 
 	gamma() = 1;//static_cast<float>(theApp.GetProfileInt("Options", "gamma", 0)) / 100.0f;
-	ambient().r() = 0.0;//static_cast<float>(theApp.GetProfileInt("Options", "rAmbient", 0));
-	ambient().g() = 0.0;//static_cast<float>(theApp.GetProfileInt("Options", "gAmbient", 0));
-	ambient().b() = 0.0;//static_cast<float>(theApp.GetProfileInt("Options", "bAmbient", 0));
+	ambient().r() = 0;//static_cast<float>(theApp.GetProfileInt("Options", "rAmbient", 0));
+	ambient().g() = 0;//static_cast<float>(theApp.GetProfileInt("Options", "gAmbient", 0));
+	ambient().b() = 0;//static_cast<float>(theApp.GetProfileInt("Options", "bAmbient", 0));
 
 	clamping() = ClampRetain;//ClampNone;
 

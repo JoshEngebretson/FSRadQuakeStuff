@@ -121,7 +121,7 @@ void	BeamTree::insert(const geom::Point3 & viewpoint, RadPrim & primitive, RadPr
 
 void	BeamTree::recursiveInsert(const geom::Point3 & viewpoint, BTEdge * edges, const unsigned int edgeCount, BeamTreeReservoir & btPool, RadPrim & primitive, RadPrimListGrainy & visiblePieces)
 {
-static	const	float	epsilon = 1.0e-4f;
+	static	const	float	epsilon = .1f;//1.0e-4f;
 
 	// Calculate deltas. Note that edge points close to a plane are snapped to the plane
 

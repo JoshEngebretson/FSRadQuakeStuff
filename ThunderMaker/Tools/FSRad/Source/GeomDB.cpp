@@ -130,7 +130,7 @@ bool GeomDB::readJSON(const fstl::string & filename, const geom::Color3 & defaul
 	polys().reserve(totalPolys);
 	RadLMap	emptyLightmap(128, 128, static_cast<int>(polyID));
 
-	double scale = 5;
+	double scale = 4;
 
 	int k = 0;
 	for (unsigned int j = 0; j < totalPolys; ++j, ++polyID)
@@ -143,17 +143,17 @@ bool GeomDB::readJSON(const fstl::string & filename, const geom::Color3 & defaul
 		geom::Point3 p2;
 
 		
-		p0.x() = json_integer_value(json_array_get(jvertices, k++)) * scale;
-		p0.z() = json_integer_value(json_array_get(jvertices, k++)) * scale;
-		p0.y() = json_integer_value(json_array_get(jvertices, k++)) * scale;	
+		p0.x() = (float) json_real_value(json_array_get(jvertices, k++)) * scale;
+		p0.z() = (float) json_real_value(json_array_get(jvertices, k++)) * scale;
+		p0.y() = (float) json_real_value(json_array_get(jvertices, k++)) * scale;	
 
-		p1.x() = json_integer_value(json_array_get(jvertices, k++)) * scale;
-		p1.z() = json_integer_value(json_array_get(jvertices, k++)) * scale;
-		p1.y() = json_integer_value(json_array_get(jvertices, k++)) * scale;	
+		p1.x() = (float) json_real_value(json_array_get(jvertices, k++)) * scale;
+		p1.z() = (float) json_real_value(json_array_get(jvertices, k++)) * scale;
+		p1.y() = (float) json_real_value(json_array_get(jvertices, k++)) * scale;	
 
-		p2.x() = json_integer_value(json_array_get(jvertices, k++)) * scale;
-		p2.z() = json_integer_value(json_array_get(jvertices, k++)) * scale;
-		p2.y() = json_integer_value(json_array_get(jvertices, k++)) * scale;	
+		p2.x() = (float) json_real_value(json_array_get(jvertices, k++)) * scale;
+		p2.z() = (float) json_real_value(json_array_get(jvertices, k++)) * scale;
+		p2.y() = (float) json_real_value(json_array_get(jvertices, k++)) * scale;	
 
 		//printf("%f %f %f ", p0.x(),  p0.y(), p0.z());
 		//printf("%f %f %f ", p1.x(),  p1.y(), p1.z());
@@ -201,14 +201,14 @@ bool GeomDB::readJSON(const fstl::string & filename, const geom::Color3 & defaul
 		RadPatch	patch1;
 		patch1.area() = 0;
 		patch1.origin() = geom::Point3(x, y, z);
-		patch1.energy() = geom::Color3(1, 1, 1) * static_cast<float>(light * 5000);
+		patch1.energy() = geom::Color3(1, 1, 1) * static_cast<float>(light * 1000);
 		patch1.plane() = geom::Plane3(patch1.origin(), geom::Vector3(0, 1, 0));
 		lights() += patch1;
 
 		RadPatch	patch2;
 		patch2.area() = 0;
 		patch2.origin() = geom::Point3(x, y, z);
-		patch2.energy() = geom::Color3(1, 1, 1) * static_cast<float>(light * 5000);
+		patch2.energy() = geom::Color3(1, 1, 1) * static_cast<float>(light * 1000);
 		patch2.plane() = geom::Plane3(patch2.origin(), geom::Vector3(0, -1, 0));
 		lights() += patch2;
 

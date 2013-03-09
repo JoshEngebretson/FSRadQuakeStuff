@@ -105,7 +105,7 @@ bool	LMapGen::generate(RadPrimList & polygons, RadLMapArray & lightmaps)
 			if (!cp.complete()) continue;
 			RadLMap &	lm = lmaps[cp.lightmapID()];
 
-			unsigned int	ptr = (unsigned int)(&cp);
+			size_t	ptr = (size_t)(&cp);
 			unsigned int	r = ((ptr >> 0)&0x7f) + 0x70;
 			unsigned int	g = ((ptr >> 1)&0x7f) + 0x70;
 			unsigned int	b = ((ptr >> 2)&0x7f) + 0x70;

@@ -202,17 +202,17 @@ static void process_worldspawn(entity_t* worldspawn)
 
             }
 
-            json_array_append_new(jvertices, json_integer((int)polys->verts[ii][0]));
-            json_array_append_new(jvertices, json_integer((int)polys->verts[ii][1]));
-            json_array_append_new(jvertices, json_integer((int)polys->verts[ii][2]));
+            json_array_append_new(jvertices, json_real((int)polys->verts[ii][0]));
+            json_array_append_new(jvertices, json_real((int)polys->verts[ii][1]));
+            json_array_append_new(jvertices, json_real((int)polys->verts[ii][2]));
 
-            json_array_append_new(jvertices, json_integer((int)polys->verts[ij][0]));
-            json_array_append_new(jvertices, json_integer((int)polys->verts[ij][1]));
-            json_array_append_new(jvertices, json_integer((int)polys->verts[ij][2]));
+            json_array_append_new(jvertices, json_real((int)polys->verts[ij][0]));
+            json_array_append_new(jvertices, json_real((int)polys->verts[ij][1]));
+            json_array_append_new(jvertices, json_real((int)polys->verts[ij][2]));
 
-            json_array_append_new(jvertices, json_integer((int)polys->verts[ik][0]));
-            json_array_append_new(jvertices, json_integer((int)polys->verts[ik][1]));
-            json_array_append_new(jvertices, json_integer((int)polys->verts[ik][2]));
+            json_array_append_new(jvertices, json_real((int)polys->verts[ik][0]));
+            json_array_append_new(jvertices, json_real((int)polys->verts[ik][1]));
+            json_array_append_new(jvertices, json_real((int)polys->verts[ik][2]));
 
         }
 
