@@ -201,14 +201,22 @@ bool GeomDB::readJSON(const fstl::string & filename, const geom::Color3 & defaul
 		RadPatch	patch1;
 		patch1.area() = 0;
 		patch1.origin() = geom::Point3(x, y, z);
-		patch1.energy() = geom::Color3(1, 1, 1) * static_cast<float>(light * 1000);
+		float r, g, b;
+		r = g = b = 1.0f;
+		/*
+		r = 100.0 / ((float) (rand()%99) + 1);
+		g = 100.0 / ((float) (rand()%99) + 1);
+		b = 100.0 / ((float) (rand()%99) + 1);
+		*/
+
+		patch1.energy() = geom::Color3(r, g, b) * static_cast<float>(light * 1000);
 		patch1.plane() = geom::Plane3(patch1.origin(), geom::Vector3(0, 1, 0));
 		lights() += patch1;
 
 		RadPatch	patch2;
 		patch2.area() = 0;
 		patch2.origin() = geom::Point3(x, y, z);
-		patch2.energy() = geom::Color3(1, 1, 1) * static_cast<float>(light * 1000);
+		patch2.energy() = geom::Color3(r, g, b) * static_cast<float>(light * 1000);
 		patch2.plane() = geom::Plane3(patch2.origin(), geom::Vector3(0, -1, 0));
 		lights() += patch2;
 
