@@ -43,7 +43,7 @@ static char THIS_FILE[] = __FILE__;
 
 // ---------------------------------------------------------------------------------------------------------------------------------
 
-static	const	float	EPSILON = 1.0e-5f;
+static	const	float	EPSILON = .1;
 
 // ---------------------------------------------------------------------------------------------------------------------------------
 // Warning: The following code is bizarre, to say the least. I'll try to explain it here:
